@@ -1,0 +1,15 @@
+G:ground
+E:Enemy
+N:Next
+
+GP
+G
+GE
+G
+
+G
+GG
+
+G
+
+N

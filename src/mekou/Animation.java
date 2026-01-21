@@ -1,3 +1,5 @@
+package mekou;
+
 import java.awt.Image;
 import java.net.URL;
 import java.util.HashMap;
@@ -9,7 +11,8 @@ public class Animation {
     private Map<String, Image[]> animMap = new HashMap<>();
     private String currentState = "idle";
     private int frameWidth = 0, frameHeight = 0;
-    
+    private int speed = 5; // フレーム切り替え速度
+
     // 画像を読み込むメソッド（ディレクトリを指定して一括ロード）
     public void load(String stateName, String dirPath, int frameCount) {
         Image[] frames = new Image[frameCount];
@@ -39,6 +42,6 @@ public class Animation {
     public Image getCurrentFrame(int tick) {
         Image[] currentImages = animMap.get(currentState);
         if (currentImages == null) return null;
-        return currentImages[tick % currentImages.length];
+        return currentImages[(tick / speed) % currentImages.length];
     }
 }

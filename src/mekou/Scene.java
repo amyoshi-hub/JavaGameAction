@@ -1,7 +1,11 @@
+package mekou;
+
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import mekou.UtilObjects.*;
+import mekou.interfaces.*;
 
 public class Scene{
     private List<GameObject> objects = new ArrayList<>();
@@ -38,9 +42,16 @@ public class Scene{
     public void CollisionCheck(){
         for (GameObject a : objects) {
             for (GameObject b : objects) {
+                if (a == b) continue; // 自分自身とは衝突しない
                 if (a != b && a.getBounds().intersects(b.getBounds())) {
-                    // 衝突時のイベント発生！
-                    //player or enemy or objectのhealth->takeDamage()などを呼び出す
+                    if (b instanceof Damageable && a instanceof Attack) {
+                        ((Damageable) b).takeDamage(10); // 例: 10のダメージを与える
+                    }
+                    if (b instanceof Ground && a instanceof Collider) {
+                        // プレイヤーが地面に衝突した場合の処理
+                        System.out.println("Hit Ground!");
+                        a.land(b.getY());
+                    }
                 }
             }
         }

@@ -1,25 +1,21 @@
-import javax.swing.*;
-import java.awt.*;
+package mekou;
+
 import java.awt.event.*;
+import javax.swing.*;
+import mekou.interfaces.Controllable;
 
-public class Movement implements ActionListener{
+public class Movement{
 
-	private Scene scene;
-	private Timer time;
+	private Controllable target;
 	private boolean leftPressed, rightPressed, spacePressed;
-	private Player player;
+	
 	private JPanel panel;
 
 
-	public Movement(Scene scene, Player player){
-		this.scene = scene;
-		this.player = player;
+	public Movement(Scene scene, Controllable target){
+		this.target = target;
 		this.panel = scene.getPanel();
 		setKeyBindings(panel);
-
-		//24FPSを基準に考える
-		this.time = new Timer(34, this);
-		this.time.start();
 	}
 
 	private void setKeyBindings(JPanel panel){
@@ -42,20 +38,16 @@ public class Movement implements ActionListener{
     		am.put("spaceReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { spacePressed = false; } });
 	}
 
-	public void actionPerformed(ActionEvent e){
+	public void applyInput(){
 		int  vx = 0;
-		if(e.getSource() == this.time){
-			if(leftPressed) vx -= 5;	
-			if(rightPressed) vx += 5;	
-		}	
-		player.setVX(vx);
+		
+		if(leftPressed) vx -= 5;	
+		if(rightPressed) vx += 5;
+		
+		target.setVX(vx);
+
 		if(spacePressed){
-			player.jump();
+			target.jump();
 		}
-
-		scene.updateAll();
-
-		scene.getPanel().repaint(); 
-        Toolkit.getDefaultToolkit().sync();
 	}
 }
