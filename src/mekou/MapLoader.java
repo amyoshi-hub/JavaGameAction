@@ -9,6 +9,7 @@ public class MapLoader {
     private final int CHIP_SIZE = 50; // 1ブロックのサイズ
     private Scene scene;
     private Player player;
+    int MAX_HEIGHT_CHIPS = 8;
 
     public <T> MapLoader(Scene scene) {
         this.scene = scene;
@@ -28,7 +29,7 @@ public class MapLoader {
                 
                 // MEKOUマッピング：配列のインデックスをそのまま座標に変換
                 int px = x * CHIP_SIZE;
-                int py = y * CHIP_SIZE;
+                int py = (MAX_HEIGHT_CHIPS - y - 1) * CHIP_SIZE;
 
                 switch (chip) {
                     case 'G':

@@ -5,13 +5,22 @@ import java.awt.Image;
 import java.awt.Rectangle;
 
 public abstract class GameObject {
+    protected boolean active = true;
+    protected Scene scene;
+
     protected float x, y, vx, vy = 0;
+    
     protected int z;
     protected int tick = 0;
+    
     protected Animation anim;
+    
     protected int width = 50, height = 50; // デフォルトサイズ（豆腐サイズ）
+    
     private float aspectRatio = 1.0f;
     protected boolean useGravity = false;
+    
+    //gravity
     protected float gravityForce = 1.3f;
     protected boolean isGrounded = false;
 
@@ -57,5 +66,15 @@ public abstract class GameObject {
         this.isGrounded = true;
         this.vy = 0;
         System.out.println("Landed on the ground at y: " + this.y);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 }

@@ -7,7 +7,7 @@ import mekou.interfaces.Controllable;
 public class Movement{
 
 	private Controllable target;
-	private boolean leftPressed, rightPressed, spacePressed;
+	private boolean leftPressed, rightPressed, spacePressed, attackPressed, CrouchPressed, UpperAction;
 	
 	private JPanel panel;
 
@@ -36,7 +36,22 @@ public class Movement{
     		im.put(KeyStroke.getKeyStroke("released SPACE"), "spaceReleased");
     		am.put("spaceAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { spacePressed = true; } });
     		am.put("spaceReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { spacePressed = false; } });
-	}
+
+			im.put(KeyStroke.getKeyStroke("C"), "AttackAction");
+			im.put(KeyStroke.getKeyStroke("released C"), "AttackReleased");
+			am.put("AttackAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { attackPressed = true; } });
+			am.put("AttackReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { attackPressed = false; } });
+
+			im.put(KeyStroke.getKeyStroke("S"), "CrouchAction");
+			im.put(KeyStroke.getKeyStroke("released S"), "CrouchReleased");
+			am.put("CrouchAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { CrouchPressed = true; } });
+			am.put("CrouchReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { CrouchPressed = false; } });
+
+			im.put(KeyStroke.getKeyStroke("W"), "UpperAction");
+			im.put(KeyStroke.getKeyStroke("released W"), "UpperReleased");
+			am.put("UpperAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { UpperAction = true; } });
+			am.put("UpperReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { UpperAction = false; } });
+		}
 
 	public void applyInput(){
 		int  vx = 0;
@@ -48,6 +63,15 @@ public class Movement{
 
 		if(spacePressed){
 			target.jump();
+		}
+		if(CrouchPressed && attackPressed==true){
+			target.downAttack();
+		}
+		if(UpperAction && attackPressed==true){
+			target.upperAction();
+		}
+		if(attackPressed){
+			target.attack();
 		}
 	}
 }

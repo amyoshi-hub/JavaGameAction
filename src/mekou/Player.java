@@ -3,9 +3,11 @@ package mekou;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import mekou.UtilObjects.AttackBox;
+import mekou.UtilObjects.SparkEffect;
 import mekou.interfaces.*;
 
-public class Player extends GameObject implements Damageable, Collider, Controllable {
+public class Player extends GameObject implements Damageable, Collider, Controllable, Attack {
 
     private int deadLine = 3000;
     private int health = 100;
@@ -30,6 +32,14 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     }
 
     @Override
+    public void attack() {
+        // 自分の座標を元に AttackBox を生み出す
+        float ax = this.x + (facingRight ? width : -40);
+        AttackBox ab = scene.createObject(new AttackBox(ax, this.y, facingRight ? "RIGHT" : "LEFT"));
+        scene.createObject(new SparkEffect(ax, this.y));
+    }
+    
+    @Override
     public int getHealth() {
         return health;
     }
@@ -38,6 +48,8 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     @Override
     public void update() {
         isGrounded = false; // 毎フレーム開始時に地面にいないと仮定
+        this.height = 50; // 通常の高さに戻す
+
         super.update();
         if(isGrounded) vy = 0;
 
@@ -45,11 +57,14 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         if (vx != 0) anim.setState("walk");
         else anim.setState("idle");
 
-        System.out.println("Player Position: (" + x + ", " + y + ")");
+        if(vx > 0) facingRight = true;
+        else if(vx < 0) facingRight = false;
+
+        //System.out.println("Player Position: (" + x + ", " + y + ")");
         //System.out.println("Player Health: " + health);
         //System.out.print(isGrounded);
-        if(y > deadLine){
-            //System.out.println("Game Over");
+        if(this.scene != null && this.scene.getPanel() != null && this.y > this.scene.getPanel().getHeight()){
+            System.out.println("落下死しました"); //リス地を知っていたらリスポーン　知らなければやり直し
         }
     }
 
@@ -79,9 +94,27 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     }
  
     public void slide() {
-    if (isGrounded) {
-        this.height = 25; // 当たり判定を半分にする（スライディング！）
-        this.vx = (facingRight) ? 10 : -10; // 勢いよく滑る
+        if (isGrounded) {
+            this.height = 25; // 当たり判定を半分にする（スライディング！）
+            this.vx = (facingRight) ? 10 : -10; // 勢いよく滑る
+        }
     }
-}
+
+    public void downAttack() {
+        System.out.println("Player performs down attack!");
+        if(isGrounded){
+            slide();
+        }else{
+            vy = 10; // 簡単な下降動作
+        }
+    }
+
+    public void upLook() {
+        System.out.println("Player looks up!");
+    }
+
+    public void upperAction() {
+        System.out.println("Player performs upper action!");
+        vy = -10; // 簡単な上昇動作
+    }
 }

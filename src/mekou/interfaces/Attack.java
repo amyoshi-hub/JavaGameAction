@@ -1,5 +1,5 @@
 package mekou.interfaces;
 
 public interface Attack {
-    void attack();
+    public void attack();
 }

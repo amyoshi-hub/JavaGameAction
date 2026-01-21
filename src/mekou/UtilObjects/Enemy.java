@@ -18,7 +18,7 @@ public class Enemy extends GameObject implements Damageable, Attack, Collider{
         this.height = 50;
         this.z = 0;
         this.health = 100;
-        anim.load("idle", "mekou/img/Enemy/idle", 4);
+        anim.load("idle", "mekou/img/Enemy/idle", 1);
     }
 
     @Override
