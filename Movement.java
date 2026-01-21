@@ -7,13 +7,14 @@ public class Movement implements ActionListener{
 	private Scene scene;
 	private Timer time;
 	private boolean leftPressed, rightPressed, spacePressed;
-		private int charX = 100, charY = 200;
-	private int velocityY  = 0;
+	private Player player;
+	private JPanel panel;
 
 
 	public Movement(Scene scene, Player player){
 		this.scene = scene;
 		this.player = player;
+		this.panel = scene.getPanel();
 		setKeyBindings(panel);
 
 		//24FPSを基準に考える
@@ -21,7 +22,7 @@ public class Movement implements ActionListener{
 		this.time.start();
 	}
 
-	private void setKeyBindings(Scene scene){
+	private void setKeyBindings(JPanel panel){
 		InputMap im = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);	
 		ActionMap am = panel.getActionMap();
 	

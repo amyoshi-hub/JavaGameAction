@@ -1,9 +1,6 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
 import java.net.*;
+import javax.swing.*;
 
 class Frame extends JFrame {
     private Gra mp;
@@ -12,22 +9,20 @@ class Frame extends JFrame {
     private Toolkit tk;
 
     Frame() {
-        this.tk = Toolkit.getDefaultToolkit();
-        GetImage(); // 画像の読み込み
 
-        this.mp = new Gra();
-        // 画像をmpにセット（アニメーション用）
-        this.mp.setAnimation(64, 64, images);
+        this.mp = new Gra(); // 描画パネル
+        Scene scene = new Scene();
+        scene.setPanel(this.mp); // Sceneにパネルを教えてあげる
 
-        JPanel panel1 = new JPanel();
-        panel1.setLayout(new BorderLayout());
-        panel1.add(this.mp, BorderLayout.CENTER);
+        this.mp.setScene(scene);
+        // プレイヤー生成とSceneへの登録
+        Player player = new Player();
+        scene.createObject(player); 
 
-        // ここでMovementを呼び出す！
-        // panel1とmpを渡すことで、Movement内でキー入力と描画更新ができるようになる
-        this.move = new Movement(panel1, this.mp);
+        // Movementに操作対象(player)を渡す
+        this.move = new Movement(scene, player);
 
-        super.getContentPane().add(panel1);
+        super.getContentPane().add(this.mp);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 400);
