@@ -1,7 +1,8 @@
-package mekou;
+package mekou.GameEngine;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import mekou.ActionGame.Movement;
 
 public class Engine implements ActionListener {
     private Movement movement;
@@ -28,6 +29,9 @@ public class Engine implements ActionListener {
         }
     }
 
+    public void stop() {
+        this.timer.stop();
+    }
 
     public void setMovement(Movement movement) {
         this.movement = movement;

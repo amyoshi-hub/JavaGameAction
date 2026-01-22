@@ -1,9 +1,9 @@
-package mekou;
+package mekou.GameEngine;
 
 import java.io.*;
 import java.nio.file.*;
-import java.util.List;
-import mekou.UtilObjects.*;
+import mekou.ActionGame.Player;
+import mekou.Entities.*;
 
 public class MapLoader {
     private final int CHIP_SIZE = 50; // 1ブロックのサイズ
@@ -44,11 +44,16 @@ public class MapLoader {
                         this.player.setY(py);
                         scene.createObject(this.player);
                         break;
+                    case 'N':
+                        String target = extractTarget(column.substring(y));
+                        scene.setSceneTriger(px, py, target);
+                        break;
                     case ' ': 
                         break;
                 }
             }
-        } }catch (IOException e) {
+        } 
+        }catch (IOException e) {
             System.err.println("Error loading map: " + e.getMessage());
             e.printStackTrace();
         }
@@ -57,4 +62,10 @@ public class MapLoader {
     public Player getPlayer() {
         return player;
     }
+
+    private String extractTarget(String data) {
+    int start = data.indexOf("(") + 1;
+    int end = data.indexOf(")");
+    return (start > 0 && end > start) ? data.substring(start, end) : "default";
+}
 }

@@ -1,12 +1,11 @@
-package mekou.UtilObjects;
+package mekou.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import mekou.GameObject;
 import java.awt.Image;
-import javax.swing.JPanel;
+import mekou.GameEngine.GameObject;
 
-public class AttackBox extends GameObject implements mekou.interfaces.AttackBoxInterface {
+public class AttackBox extends GameObject implements mekou.GameEngine.interfaces.AttackBoxInterface {
     private int lifeSpan = 10; // 10フレームだけ存在して消える
     private int damage = 20;
 

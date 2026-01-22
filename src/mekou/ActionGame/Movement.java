@@ -1,8 +1,9 @@
-package mekou;
+package mekou.ActionGame;
 
 import java.awt.event.*;
 import javax.swing.*;
-import mekou.interfaces.Controllable;
+import mekou.GameEngine.Scene;
+import mekou.GameEngine.interfaces.Controllable;
 
 public class Movement{
 

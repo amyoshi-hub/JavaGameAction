@@ -1,8 +1,8 @@
-package mekou.UtilObjects;
+package mekou.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import mekou.GameObject;
+import mekou.GameEngine.GameObject;
 
 public class Ground extends GameObject {
 

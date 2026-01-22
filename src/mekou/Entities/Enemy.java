@@ -1,14 +1,15 @@
-package mekou.UtilObjects;
+package mekou.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Random;
-import mekou.GameObject;
-import mekou.interfaces.*;
+import mekou.GameEngine.GameObject;
+import mekou.GameEngine.interfaces.*;
 
 public class Enemy extends GameObject implements Damageable, Attack, Collider, Npc{
     private int health;
+    private int nockbackPower = 10;
 
     public Enemy(int x, int y) {
         super();
@@ -70,10 +71,9 @@ private int currentDir = 0; // -1: 左, 0: 静止, 1: 右
     @Override
     public void takeDamage(int damage) {
         health -= damage;
-        vx = -5; // ダメージを受けたら少し後退
         GameObject player = this.scene.getPlayer();
         if(player != null){
-            this.vx = (player.getX() < this.x) ? 5 : -5; // プレイヤーの反対方向にノックバック
+            this.vx = (player.getX() < this.x) ? nockbackPower : -nockbackPower; // プレイヤーの反対方向にノックバック
         }
         if (health < 0) health = 0;
 
@@ -92,4 +92,10 @@ private int currentDir = 0; // -1: 左, 0: 静止, 1: 右
     public void attack() {
         System.out.println("Enemy attacks!");
     }
+
+    @Override
+    public void onCollide(GameObject other) {
+        // 衝突時の処理（必要に応じて実装）
+    }
+    
 }

@@ -1,4 +1,4 @@
-package mekou;
+package mekou.GameEngine;
 
 import java.awt.*;
 import javax.swing.*;

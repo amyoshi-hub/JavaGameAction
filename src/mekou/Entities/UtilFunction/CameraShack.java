@@ -1,7 +1,7 @@
-package mekou.UtilObjects.UtilFunction;
+package mekou.Entities.UtilFunction;
 
-import mekou.Gra;
-import mekou.Scene;
+import mekou.GameEngine.Gra;
+import mekou.GameEngine.Scene;
 
 public class CameraShack {
     private static Gra gamePanel; // 揺らす対象を保持しておく

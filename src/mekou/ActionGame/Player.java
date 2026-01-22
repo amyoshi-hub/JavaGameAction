@@ -1,11 +1,14 @@
-package mekou;
+package mekou.ActionGame;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import mekou.UtilObjects.AttackBox;
-import mekou.UtilObjects.SparkEffect;
-import mekou.interfaces.*;
+
+import mekou.Entities.AttackBox;
+import mekou.Entities.SparkEffect;
+import mekou.GameEngine.GameObject;
+import mekou.GameEngine.Scene;
+import mekou.GameEngine.interfaces.*;
 
 public class Player extends GameObject implements Damageable, Collider, Controllable, Attack {
 
@@ -116,5 +119,10 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     public void upperAction() {
         System.out.println("Player performs upper action!");
         vy = -10; // 簡単な上昇動作
+    }
+
+    @Override
+    public void onCollide(GameObject other){
+
     }
 }

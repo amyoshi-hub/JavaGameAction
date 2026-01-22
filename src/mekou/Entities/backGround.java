@@ -1,9 +1,9 @@
-package mekou.UtilObjects;
+package mekou.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import mekou.GameObject;
+import mekou.GameEngine.GameObject;
 
 public class backGround extends GameObject {
 

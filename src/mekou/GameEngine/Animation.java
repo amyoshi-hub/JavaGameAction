@@ -1,4 +1,4 @@
-package mekou;
+package mekou.GameEngine;
 
 import java.awt.Image;
 import java.net.URL;

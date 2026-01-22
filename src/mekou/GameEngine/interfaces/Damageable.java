@@ -1,4 +1,4 @@
-package mekou.interfaces;
+package mekou.GameEngine.interfaces;
 
 public interface Damageable {
     void takeDamage(int damage);

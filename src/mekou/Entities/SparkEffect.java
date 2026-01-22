@@ -1,8 +1,8 @@
-package mekou.UtilObjects;
+package mekou.Entities;
 
 import java.awt.*;
-import mekou.GameObject;
-import mekou.UtilObjects.UtilFunction.CameraShack;
+import mekou.Entities.UtilFunction.CameraShack;
+import mekou.GameEngine.GameObject;
 
 public class SparkEffect extends GameObject {
     private int life = 10;
