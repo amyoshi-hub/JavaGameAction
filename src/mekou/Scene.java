@@ -11,7 +11,11 @@ public class Scene{
     private List<GameObject> objectsToAdd = new ArrayList<>();
     private List<GameObject> objects = new ArrayList<>();
     private JPanel panel;
-    
+    private GameObject player;
+
+    public GameObject getPlayer(){
+        return this.player;
+    }
 
     public void setPanel(JPanel panel){
         this.panel = panel;

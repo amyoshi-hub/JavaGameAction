@@ -30,13 +30,13 @@ public class Gra extends JPanel {
         if (scene != null) {
             int shakeX = 0, shakeY = 0;
             if(cameraTarget != null){
+                updateCamera();
                 if(cameraShack > 0){
                     shakeX = (int)(Math.random() * cameraShack * 2) - cameraShack;
                     shakeY = (int)(Math.random() * cameraShack * 2) - cameraShack;
                 }
                 g2.translate(-cameraTarget.getX() + 350 + shakeX, -50 + shakeY);
             scene.drawAll(g2); // Sceneに登録された全オブジェクトを一括描画！
-            updateCamera();
         }
         if (cameraTarget != null) {
                 g2.translate(-(350 - (int)cameraTarget.getX()), 0);

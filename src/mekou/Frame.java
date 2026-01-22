@@ -3,6 +3,7 @@ package mekou;
 import java.awt.*;
 import javax.swing.*;
 import mekou.UtilObjects.*;
+import mekou.UtilObjects.UtilFunction.CameraShack;
 
 
 class Frame extends JFrame {
@@ -21,6 +22,7 @@ class Frame extends JFrame {
 
         // エンジン生成
         Engine engine = new Engine(scene);
+        CameraShack.init(this.mp); //ここを切れば酔い防止可能
         
         MapLoader loader = new MapLoader(scene);
         loader.loadMap("../stages/stage1.txt");

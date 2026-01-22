@@ -11,7 +11,7 @@ public class Engine implements ActionListener {
     public Engine(Scene scene) {
 
         this.scene = scene;
-        this.timer = new Timer(42, this); // 約24FPS
+        this.timer = new Timer(31, this); // 約24FPS
         this.timer.start();
     }
 
