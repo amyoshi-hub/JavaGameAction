@@ -64,7 +64,7 @@ private int currentDir = 0; // -1: 左, 0: 静止, 1: 右
         }else{
             g.setColor(Color.RED);
             g.fillRect((int)x, (int)y, width, height);
-            System.out.println("Enemy image is null");
+            //System.out.println("Enemy image is null");
         }
     }
 

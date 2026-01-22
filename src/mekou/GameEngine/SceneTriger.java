@@ -1,5 +1,6 @@
 package mekou.GameEngine;
 
+import mekou.GameEngine.UI.DialogueManager;
 import mekou.GameEngine.interfaces.Collider;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,10 +38,27 @@ public class SceneTriger extends GameObject implements Collider {
     public void onCollide(GameObject other) {
         if (other instanceof mekou.ActionGame.Player) {
             // プレイヤーが触れたときの処理
+            if(targetSceneName == null || targetSceneName.isEmpty()) {
+                System.out.println("No target scene specified for SceneTriger.");
+                return;
+            }
+            if(targetSceneName.startsWith("DIALOG:")){
+                String dialogId = targetSceneName.substring("DIALOG:".length());
+                System.out.println("Dialogue Triggered: " + dialogId);
+                DialogueManager.getInstance().startDialogue(dialogId);
+                return;
+            }
             System.out.println("Scene Transition Triggered to: " + targetSceneName);
             SceneManager.getInstance().load(targetSceneName);
         }
     }
 
     public String getTarget() { return targetSceneName; }
+        public SceneManager.GameMode getCurrentMode() {
+        return SceneManager.getInstance().getCurrentGameMode();
+    }
+
+    public DialogueManager getDialogueManager() {
+        return DialogueManager.getInstance(); 
+    }
 }

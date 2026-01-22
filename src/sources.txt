@@ -2,7 +2,7 @@ C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\ActionGame\Movement.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\ActionGame\Player.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\AttackBox.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\backGround.java
-C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\DialogueManager.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\Decal.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\Enemy.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\Ground.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\Entities\SparkEffect.java
@@ -24,3 +24,8 @@ C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\Controllable.
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\Damageable.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\Npc.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\SceneNextTriger.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\UI\DialogueManager.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\UI\DialoguePage.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\UI\HUD.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\UI\UIManager.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\UI\UIInterface\UIElement.java

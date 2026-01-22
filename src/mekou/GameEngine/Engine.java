@@ -18,19 +18,31 @@ public class Engine implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == this.timer) {
-            if (movement != null) {
-                movement.applyInput();
-            }
-            scene.updateAll();
-            scene.CollisionCheck();
+        if(e.getSource() != this.timer) return;
+        //UIMode
+        if(SceneManager.getInstance().getCurrentGameMode() == SceneManager.GameMode.DIALOG){
+            //((Gra)scene.getPanel()).getUIManager().update();
             scene.getPanel().repaint();
             Toolkit.getDefaultToolkit().sync();
+            return;
         }
+
+        //通常処理
+        if (movement != null) {
+            movement.applyInput();
+        }            scene.updateAll();
+        scene.updateAll();
+        scene.CollisionCheck();
+        scene.getPanel().repaint();
+        Toolkit.getDefaultToolkit().sync();
     }
 
     public void stop() {
         this.timer.stop();
+    }
+
+    public void updateScene(Scene scene) {
+        this.scene = scene;
     }
 
     public void setMovement(Movement movement) {

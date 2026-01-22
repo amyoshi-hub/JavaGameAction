@@ -1,0 +1,11 @@
+speacker:操作説明
+ゲームの遊び方
+-
+speacker:操作説明
+攻撃 : C
+-
+speacker:操作説明
+スライディング : S + C
+-
+speacker:操作説明
+上攻撃 : W + C

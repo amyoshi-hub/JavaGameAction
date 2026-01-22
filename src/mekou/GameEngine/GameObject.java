@@ -65,7 +65,7 @@ public abstract class GameObject {
         this.y = groundY - this.height; // 足元を地面の天面に合わせる
         this.isGrounded = true;
         this.vy = 0;
-        System.out.println("Landed on the ground at y: " + this.y);
+        //System.out.println("Landed on the ground at y: " + this.y);
     }
 
     public boolean isActive() {

@@ -12,4 +12,5 @@ GG
 
 G
 
-N(Town1)
+GGGGGGGGG
+N(DIALOG_01)

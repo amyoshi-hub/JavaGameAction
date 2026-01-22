@@ -26,7 +26,7 @@ public class backGround extends GameObject {
         }else{
             g.setColor(Color.BLUE);
             g.fillRect((int)x, (int)y, width, height);
-            System.out.println("backGround image is null");
+            //System.out.println("backGround image is null");
         }
     }
 }

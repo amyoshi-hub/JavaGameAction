@@ -1,10 +1,9 @@
 package mekou.GameEngine;
 
 import javax.swing.*;
-import mekou.ActionGame.Movement;
-import mekou.ActionGame.Player;
+import mekou.ActionGame.*;
 import mekou.Entities.*;
-import mekou.Entities.UtilFunction.CameraShack;
+import mekou.Entities.UtilFunction.*;
 
 
 public class Frame extends JFrame {
@@ -15,15 +14,17 @@ public class Frame extends JFrame {
     Frame() {
 
         this.mp = new Gra(); // 描画パネル
-        SceneManager sm = SceneManager.getInstance();
-        sm.setFrame(this);
-        sm.registerStages("../Games/stages/Stages.txt");
-        initGame("../Games/stages/stage1.txt");
-        
+
         super.getContentPane().add(this.mp);
         super.setSize(700, 400);
         setLocation(100, 100);
         setVisible(true);
+
+        SceneManager sm = SceneManager.getInstance();
+        sm.setFrame(this);
+        sm.registerStages("../Games/stages/Stages.txt");
+        System.out.println(sm.getCurrentGameMode());
+        initGame("../Games/stages/stage1.txt");
     }
 
     public void initGame(String mapPath){
@@ -34,10 +35,14 @@ public class Frame extends JFrame {
         this.mp.setScene(newScene);
 
         this.engine = new Engine(newScene);
+        System.out.println("Engine Start");
         CameraShack.init(this.mp);
         
         MapLoader loader = new MapLoader(newScene);
+        System.out.println("MapLoaded");
+        
         loader.loadMap(mapPath);
+        System.out.println("map applied");
 
         Player player = loader.getPlayer();
         if(player != null){

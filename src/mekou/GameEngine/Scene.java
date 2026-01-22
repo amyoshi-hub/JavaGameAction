@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import mekou.GameEngine.UI.DialogueManager;
 
 public class Scene{
     private List<GameObject> objectsToAdd = new ArrayList<>();
@@ -45,6 +46,7 @@ public class Scene{
             objects.addAll(objectsToAdd);
             objectsToAdd.clear();
         }
+        objects.removeIf(obj -> obj == null);
         objects.sort((a, b) -> Integer.compare(a.getZ(), b.getZ()));
         for(GameObject obj : objects){
             obj.update();
@@ -64,5 +66,9 @@ public class Scene{
 
     public void setPlayer(GameObject player) {
         this.player = player;
+    }
+
+    public DialogueManager getDialogueManager() {
+        return DialogueManager.getInstance(); 
     }
 }

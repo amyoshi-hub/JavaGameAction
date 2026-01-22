@@ -1,5 +1,7 @@
 package mekou.GameEngine.interfaces;
 
+import mekou.GameEngine.Scene;
+
 public interface Controllable {
     public void setVX(float vx);
     public void setVY(float vy);
@@ -8,4 +10,5 @@ public interface Controllable {
     void attack();
     void upperAction();
     void downAttack();
+    Scene getScene();
 }

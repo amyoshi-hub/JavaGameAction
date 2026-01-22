@@ -6,6 +6,7 @@ import javax.swing.*;
 public class Gra extends JPanel {
     private Scene scene;
     private GameObject cameraTarget;
+    private UIManager uiManager = new UIManager();
 
     private int cameraShack = 0;
 
@@ -52,5 +53,9 @@ public class Gra extends JPanel {
 
     public void setShack(int amount){
         cameraShack = amount;
-    }   
+    }
+
+    public UIManager getUIManager() {
+    return this.uiManager; // Graが持っているUIManagerを返す
+}
 }

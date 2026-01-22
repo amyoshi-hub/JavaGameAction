@@ -3,6 +3,8 @@ package mekou.ActionGame;
 import java.awt.event.*;
 import javax.swing.*;
 import mekou.GameEngine.Scene;
+import mekou.GameEngine.SceneManager;
+import mekou.GameEngine.SceneManager.GameMode;
 import mekou.GameEngine.interfaces.Controllable;
 
 public class Movement{
@@ -55,6 +57,15 @@ public class Movement{
 		}
 
 	public void applyInput(){
+		GameMode currentMode = SceneManager.getInstance().getCurrentGameMode();
+		if(currentMode == GameMode.DIALOG){
+			if(spacePressed) {
+				target.getScene().getDialogueManager().onNext();
+				spacePressed = false;
+			}
+			target.setVX(0);
+			return;
+		}
 		int  vx = 0;
 		
 		if(leftPressed) vx -= 5;	
@@ -64,6 +75,7 @@ public class Movement{
 
 		if(spacePressed){
 			target.jump();
+			//Eventで処理
 		}
 		if(CrouchPressed && attackPressed==true){
 			target.downAttack();

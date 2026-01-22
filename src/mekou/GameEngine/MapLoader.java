@@ -32,6 +32,25 @@ public class MapLoader {
                 int py = (MAX_HEIGHT_CHIPS - y - 1) * CHIP_SIZE;
 
                 switch (chip) {
+                    //特殊parse
+                    case 'N': // SceneTriger
+                    case 'D': // Decal
+                        String sub = column.substring(y);
+                        String target = extractTarget(sub);
+                        
+                        if (chip == 'N') scene.setSceneTriger(px, py, target);
+                        else scene.createObject(new Decal(px, py, 0, target));
+                        
+                        // カッコの終わり ')' までインデックスを飛ばす
+                        int closingBracketIndex = sub.indexOf(")");
+                            if (closingBracketIndex != -1) {
+                                y += closingBracketIndex; // カッコがある時だけ飛ばす
+                            } else {
+                                // カッコがない場合はエラーを出してその1文字だけ飛ばす
+                                System.err.println("Map Error: Missing ')' at col " + x + " index " + y);
+                        }
+                        break;
+
                     case 'G':
                         scene.createObject(new Ground(px, py, CHIP_SIZE, CHIP_SIZE));
                         break;
@@ -43,10 +62,6 @@ public class MapLoader {
                         this.player.setX(px);
                         this.player.setY(py);
                         scene.createObject(this.player);
-                        break;
-                    case 'N':
-                        String target = extractTarget(column.substring(y));
-                        scene.setSceneTriger(px, py, target);
                         break;
                     case ' ': 
                         break;

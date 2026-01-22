@@ -3,7 +3,6 @@ package mekou.ActionGame;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-
 import mekou.Entities.AttackBox;
 import mekou.Entities.SparkEffect;
 import mekou.GameEngine.GameObject;
@@ -30,7 +29,8 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         health -= damage;
         System.out.println("Player took " + damage + " damage. Current health: " + health);
         if (health <= 0) {
-            System.out.println("Player is dead.");
+            //System.out.println("Player is dead.");
+            // 死亡処理をここに追加
         }
     }
 
@@ -67,7 +67,7 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         //System.out.println("Player Health: " + health);
         //System.out.print(isGrounded);
         if(this.scene != null && this.scene.getPanel() != null && this.y > this.scene.getPanel().getHeight()){
-            System.out.println("落下死しました"); //リス地を知っていたらリスポーン　知らなければやり直し
+            //System.out.println("落下死しました"); //リス地を知っていたらリスポーン　知らなければやり直し
         }
     }
 
@@ -124,5 +124,9 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     @Override
     public void onCollide(GameObject other){
 
+    }
+
+    public Scene getScene(){
+        return this.scene;
     }
 }
