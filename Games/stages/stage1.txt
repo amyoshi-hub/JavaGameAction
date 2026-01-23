@@ -6,11 +6,12 @@ GP
 G
 GE
 G
-
+G
 G
 GG
-
 G
-
-GGGGGGGGG
-N(DIALOG_01)
+G
+G
+G
+GN(DIALOG_01)
+G
