@@ -7,10 +7,13 @@ import java.awt.Color;
 
 import mekou.GameEngine.UI.DialogueManager;
 import mekou.GameEngine.interfaces.Collider;
+import mekou.ActionGame.Player;
 import mekou.GameEngine.GameLib.GameMode;
 
 public class SceneTriger extends GameObject implements Collider {
     private String targetSceneName;
+    private boolean isPlayerInside = false;
+    private boolean hitThisFrame = false;
 
     public SceneTriger(int x, int y, String targetSceneName) {
         super();
@@ -27,6 +30,11 @@ public class SceneTriger extends GameObject implements Collider {
         // プレイヤーとの衝突判定は CollisionManager 側でやるか、
         // ここで自分からチェックしてもOK
         super.update();
+        if(isPlayerInside && !hitThisFrame){
+            onExit(Player.getInstance());
+            isPlayerInside = false;
+        }
+        hitThisFrame = false;
     }
 
     @Override
@@ -37,22 +45,26 @@ public class SceneTriger extends GameObject implements Collider {
     }
 
     public void onCollide(GameObject other) {
-        if (other instanceof mekou.ActionGame.Player) {
-            // プレイヤーが触れたときの処理
-            if(targetSceneName == null || targetSceneName.isEmpty()) {
-                System.out.println("No target scene specified for SceneTriger.");
-                return;
+        if (other instanceof Player) {
+            Player p = Player.getInstance();
+            
+            // 1. フラグを立てる（未設定なら）
+            if(!isPlayerInside){
+                onEnter((Player)other);
+                isPlayerInside = true;
             }
+
+            // 2. DIALOG 判定
             if(targetSceneName.startsWith("DIALOG:")){
                 String dialogId = targetSceneName.substring("DIALOG:".length()).replace(")", "");
-                System.out.println("Dialogue Triggered: " + dialogId);
-                DialogueManager.getInstance().enterDialogueMode();
-                DialogueManager.getInstance().startDialogue(dialogId);
-                System.out.println(SceneManager.getInstance().getCurrentGameMode());
+                // ここで開始せず、Player（または Movement）に ID を記憶させるだけ！
+                Player.getInstance().setPendingDialogId(dialogId); 
+                //System.out.println("dialog objectと衝突" + dialogId);
                 return;
             }
-            System.out.println("Scene Transition Triggered to: " + targetSceneName);
-            SceneManager.getInstance().load(targetSceneName); /*ここ*/
+
+            // 3. シーン遷移（こっちは触れたら即移動でOKならそのまま）
+            SceneManager.getInstance().load(targetSceneName);
         }
     }
 
@@ -63,5 +75,15 @@ public class SceneTriger extends GameObject implements Collider {
 
     public DialogueManager getDialogueManager() {
         return DialogueManager.getInstance(); 
+    }
+
+    private void onEnter(Player p) {
+        System.out.println("Enter: 会話範囲に入った");
+    }
+
+    private void onExit(Player p) {
+        System.out.println("Exit: 会話範囲から出た");
+        p.setPendingDialogId(null); // 離れたらIDを消す！
+        if(p.getCanAction()) p.changeCanAction(); // アクション不可に戻す
     }
 }

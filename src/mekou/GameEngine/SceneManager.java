@@ -59,6 +59,7 @@ public class SceneManager {
         return modeHistory.peek();
     }
     public void pushMode(GameMode newMode){
+        if(getCurrentGameMode() == newMode) return;
         modeHistory.push(newMode);
     }
     public void popMode(){

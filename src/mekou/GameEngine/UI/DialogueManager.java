@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import mekou.ActionGame.Player;
+import mekou.GameEngine.*;
 import mekou.GameEngine.GameLib.GameMode;
-import mekou.GameEngine.SceneManager;
 
 public class DialogueManager {
     private static DialogueManager instance;
@@ -47,6 +48,7 @@ public class DialogueManager {
 
 
     public void startDialogue(String dialogID) {
+        //if(SceneManager.getInstance().getCurrentGameMode() == GameMode.DIALOG) return;
         enterDialogueMode();
 
         // 1. キャッシュになければ読み込む (load内部でキャッシュへのputまで完結させる)
@@ -156,5 +158,9 @@ public class DialogueManager {
         pages = new ArrayList<>();
         fullText = "";
         SceneManager.getInstance().popMode();
+        if(Player.getInstance().getCanAction()){
+            Player.getInstance().changeCanAction();
+            System.out.println("会話はもうできません");
+        }
     }
 }

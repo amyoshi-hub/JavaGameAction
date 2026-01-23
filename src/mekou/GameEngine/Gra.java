@@ -61,4 +61,7 @@ public class Gra extends JPanel {
         cameraShack = amount;
     }
 
+    public Scene getScene(){
+        return this.scene;
+    }
 }

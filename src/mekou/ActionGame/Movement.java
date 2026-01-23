@@ -5,6 +5,7 @@ import javax.swing.*;
 import mekou.GameEngine.GameLib.GameMode;
 import mekou.GameEngine.Scene;
 import mekou.GameEngine.SceneManager;
+import mekou.GameEngine.UI.DialogueManager;
 import mekou.GameEngine.interfaces.Controllable;
 
 public class Movement{
@@ -60,9 +61,9 @@ public class Movement{
 		GameMode currentMode = SceneManager.getInstance().getCurrentGameMode();
 		if(currentMode == GameMode.DIALOG){
 			if(spacePressed) {
-				target.getScene().getDialogueManager().onNext();
-				spacePressed = false;
-			}
+					target.getScene().getDialogueManager().onNext();
+					spacePressed = false;
+				}
 			target.setVX(0);
 			return;
 		}
@@ -74,9 +75,19 @@ public class Movement{
 		target.setVX(vx);
 
 		if(spacePressed){
-			target.jump();
-			//Eventで処理
-		}
+        System.out.println("space pressed" + target.getCanAction());
+			if(target.getCanAction()){
+				// 待機していた ID で会話を開始
+				String id = target.getPendingDialogId();
+				System.out.println("会話を試みる" + id);
+				DialogueManager.getInstance().startDialogue(id);
+				
+				spacePressed = false; // 会話開始に消費。ジャンプさせない！
+			} else {
+				target.jump();
+				spacePressed = false;
+			}
+    	}
 		if(CrouchPressed && attackPressed==true){
 			target.downAttack();
 		}

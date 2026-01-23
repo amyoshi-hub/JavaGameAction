@@ -4,21 +4,17 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
+import mekou.ActionGame.Player;
 import mekou.GameEngine.UI.DialogueManager;
 
 public class Scene{
     private List<GameObject> objectsToAdd = new ArrayList<>();
     private List<GameObject> objects = new ArrayList<>();
     private JPanel panel;
-    private GameObject player;
     private CollisionManager collisionManager;
 
     public Scene(){
         this.collisionManager = new CollisionManager(this);
-    }
-
-    public GameObject getPlayer(){
-        return this.player;
     }
 
     public void setPanel(JPanel panel){
@@ -76,14 +72,13 @@ public class Scene{
     }
 
     public void CollisionCheck(){
-        collisionManager.checkAll(objects, player);
-    }
-
-    public void setPlayer(GameObject player) {
-        this.player = player;
+        collisionManager.checkAll(objects, Player.getInstance());
     }
 
     public DialogueManager getDialogueManager() {
         return DialogueManager.getInstance(); 
+    }
+    public List<GameObject> getObjects() {
+        return this.objects;
     }
 }

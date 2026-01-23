@@ -1,9 +1,11 @@
 package mekou.GameEngine;
 
+import java.awt.GridBagLayout;
 import javax.swing.*;
 import mekou.ActionGame.*;
 import mekou.Entities.*;
 import mekou.Entities.UtilFunction.*;
+import mekou.GameEngine.Editor.EditorFrame;
 import mekou.GameEngine.GameLib.GameMode;
 
 
@@ -11,6 +13,8 @@ public class Frame extends JFrame {
     private Gra mp;
     private Engine engine;
     private Movement move; // Movementを保持
+    private JPanel titlePanel;
+
 
     Frame() {
 
@@ -21,12 +25,56 @@ public class Frame extends JFrame {
         setLocation(100, 100);
         setVisible(true);
 
-        SceneManager sm = SceneManager.getInstance();
-        sm.setFrame(this);
-        sm.registerStages("Games/stages/Stages.txt");
-        initGame("Games/stages/stage1.txt");
-        System.out.println(sm.getCurrentGameMode());
+        SceneManager.getInstance().setFrame(this);
+
+        showTitleMenu();
     }
+
+
+    private void showTitleMenu() {
+        titlePanel = new JPanel(new GridBagLayout());
+        
+        // mpを隠してtitlePanelを前面に出す
+        this.mp.setVisible(false);
+        this.getContentPane().add(titlePanel); 
+
+        JButton playButton = new JButton("冒険を始める");
+        JButton editorButton = new JButton("エディタを起動");
+
+        // --- プレイボタン ---
+        playButton.addActionListener(e -> {
+            playGame(); // ここでtitlePanelをremoveしてmpを出す
+        });
+
+        // --- エディタボタン ---
+        editorButton.addActionListener(e -> {
+            // エディタ起動時はタイトルを消してゲーム画面を出し、その横に別窓を出す
+            this.remove(titlePanel);
+            this.mp.setVisible(true);
+            startEditor(); 
+            this.revalidate();
+            this.repaint();
+        });
+
+        titlePanel.add(playButton);
+        titlePanel.add(editorButton);
+        
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void playGame(){
+        this.remove(titlePanel);
+        SceneManager.getInstance().registerStages("Games/stages/Stages.txt");
+        initGame("Games/stages/stage1.txt");
+    }
+
+    private void startEditor(){
+        initGame("Games/stages/stage1.txt");
+        Scene currentScene = this.mp.getScene(); //見えているシーンからぶんどる
+        EditorFrame editor = new EditorFrame(currentScene);
+    }
+
 
     public void initGame(String mapPath){
         if (engine != null) engine.stop(); 

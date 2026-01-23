@@ -11,4 +11,6 @@ public interface Controllable {
     void upperAction();
     void downAttack();
     Scene getScene();
+    boolean getCanAction();
+    String getPendingDialogId();
 }

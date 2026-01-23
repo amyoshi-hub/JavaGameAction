@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Random;
-import mekou.GameEngine.Chara;
-import mekou.GameEngine.interfaces.*;
+import mekou.ActionGame.Player;
 import mekou.GameEngine.*;
+import mekou.GameEngine.interfaces.*;
 
 public class Enemy extends Chara implements Npc{
     private int nockbackPower = 10;
@@ -82,7 +82,7 @@ private int currentDir = 0; // -1: 左, 0: 静止, 1: 右
     @Override
     public void takeDamage(int damage) {
         health -= damage;
-        GameObject player = this.scene.getPlayer();
+        GameObject player = Player.getInstance();
         if(player != null){
             this.vx = (player.getX() < this.x) ? nockbackPower : -nockbackPower; // プレイヤーの反対方向にノックバック
         }

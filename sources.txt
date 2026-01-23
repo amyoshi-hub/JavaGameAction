@@ -18,6 +18,9 @@ C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\MapLoader.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\Scene.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\SceneManager.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\SceneTriger.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\Editor\EditorExporter.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\Editor\EditorFrame.java
+C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\Editor\EditorScene.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\GameLib\GameMode.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\Attack.java
 C:\Users\amyoshi9\Desktop\JavaGame\src\mekou\GameEngine\interfaces\AttackBoxInterface.java

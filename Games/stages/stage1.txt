@@ -4,8 +4,8 @@ N:Next
 
 GP
 G
-GE
-G
+GE  G
+G   G
 G
 G
 GG

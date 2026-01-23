@@ -10,8 +10,13 @@ import mekou.GameEngine.interfaces.Controllable;
 
 public class Player extends Chara implements Controllable{
 
+    private static Player instance;
+    private boolean CanAction = false;
+    private String pendingDialogId = "";
+
     public Player() {
         super();
+        instance = this;
         this.useGravity = true;
         this.health = 100;
         this.maxHealth = 100;
@@ -100,6 +105,14 @@ public class Player extends Chara implements Controllable{
 
     }
 
+    public void changeCanAction(){
+        CanAction = !CanAction;
+    }
+
+    public boolean getCanAction(){
+        return this.CanAction;
+    }
+
     @Override
     protected void onFalled(){
         this.x = 100;
@@ -109,5 +122,15 @@ public class Player extends Chara implements Controllable{
 
     public Scene getScene(){
         return this.scene;
+    }
+    @Override
+    public String getPendingDialogId() { return pendingDialogId; }
+
+    public void setPendingDialogId(String id) { this.pendingDialogId = id; }
+    public static Player getInstance(){
+        if(instance == null){
+            instance = new Player();
+        }
+         return instance;
     }
 }
