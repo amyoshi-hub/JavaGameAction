@@ -36,7 +36,7 @@ public class DialogueManager {
         currentPageIndex++;
         if(currentPageIndex < pages.size()){
             DialoguePage page = pages.get(currentPageIndex);
-            startDialogue(page.getText());
+            displayPage(page);
         }else{
             SceneManager.getInstance().exitDialogueMode();
         }
@@ -93,16 +93,10 @@ public class DialogueManager {
             newPages.add(new DialoguePage("System", "Error: File not found."));
         }
         dialogCache.put(dialogID, newPages);
-    }
-
-    public void drawDialogue(Graphics g, String name, String text) {
-        g.setColor(new Color(0, 0, 0, 200)); // 半透明の黒
-        g.fillRect(50, 250, 600, 100);       // メッセージ枠
-        
-        g.setColor(Color.WHITE);
-        g.setFont(new Font("MS Gothic", Font.BOLD, 16));
-        g.drawString("【" + name + "】", 70, 275);
-        g.drawString(text, 70, 310);
+            System.out.println("Dialog 中身");
+            for (DialoguePage p : newPages) {
+                System.out.println("Name: [" + p.getName() + "] Text: [" + p.getText().replace("\n", " ") + "]");
+            }
     }
 
     public void draw(Graphics2D g2) {
@@ -113,6 +107,23 @@ public class DialogueManager {
     
         // ここで座布団と文字を描画
         drawDialogue(g2, currPage.getName(), subText);
+    }
+
+    public void drawDialogue(Graphics g, String name, String text) {
+        g.setColor(new Color(0, 0, 0, 200)); // 半透明の黒
+        g.fillRect(50, 100, 600, 120);       // メッセージ枠
+        
+        System.out.println(name);
+        System.out.println(text);
+
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("MS Gothic", Font.BOLD, 16));
+        g.drawString("【" + name + "】", 70, 275);
+        g.setFont(new Font("MS Gothic", Font.PLAIN, 16));
+        String[] lines = text.split("\n");
+        for (int i = 0; i < lines.length; i++) {
+            g.drawString(lines[i], 80, 300 + (i * 25));
+        }
     }
 
     private void displayPage(DialoguePage page) {
