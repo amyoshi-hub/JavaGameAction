@@ -3,6 +3,8 @@ package mekou.GameEngine;
 import java.awt.*;
 import javax.swing.*;
 
+import mekou.GameEngine.UI.DialogueManager;
+
 public class Gra extends JPanel {
     private Scene scene;
     private GameObject cameraTarget;
@@ -42,6 +44,8 @@ public class Gra extends JPanel {
         if (cameraTarget != null) {
                 g2.translate(-(350 - (int)cameraTarget.getX()), 0);
         }
+        
+        DialogueManager.getInstance().draw(g2);
         }
     }
 
