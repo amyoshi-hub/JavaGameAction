@@ -22,9 +22,9 @@ public class Frame extends JFrame {
 
         SceneManager sm = SceneManager.getInstance();
         sm.setFrame(this);
-        sm.registerStages("../Games/stages/Stages.txt");
+        sm.registerStages("Games/stages/Stages.txt");
         System.out.println(sm.getCurrentGameMode());
-        initGame("../Games/stages/stage1.txt");
+        initGame("Games/stages/stage1.txt");
     }
 
     public void initGame(String mapPath){

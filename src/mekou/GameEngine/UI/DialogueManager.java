@@ -48,10 +48,8 @@ public class DialogueManager {
 
         // 1. もしキャッシュになかったら「読み込み処理」をする
         if(!dialogCache.containsKey(dialogID)){
-            // 本来はここでファイルを読む（今はとりあえずリストを作る）
-            List<DialoguePage> newPages = new ArrayList<>();
-            // newPages.add(new DialoguePage("案内人", "ようこそMEKOUエンジンへ！"));
-            dialogCache.put(dialogID, newPages);
+            loadDialogueFile(dialogID);            
+            dialogCache.put(dialogID, pages);
         }
 
         // 2. キャッシュからリストを取り出す
@@ -62,6 +60,39 @@ public class DialogueManager {
         if(pages != null && !pages.isEmpty()){
             displayPage(pages.get(0));
         }
+    }
+
+    private void loadDialogueFile(String dialogID) {
+        List<DialoguePage> newPages = new ArrayList<>();
+        // パスを構築: stages/DIALOG/ + dialog_01 + .txt
+        String path = "Games/stages/DIALOG/" + dialogID + ".txt";
+
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(path))) {
+            String line;
+            String currentName = "???";
+            StringBuilder currentText = new StringBuilder();
+
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("speacker:")) {
+                    currentName = line.substring("speacker:".length()).trim();
+                } else if (line.equals("-")) {
+                    // 区切り線が来たら、それまでの内容をページとして保存
+                    newPages.add(new DialoguePage(currentName, currentText.toString().trim()));
+                    currentText.setLength(0); // テキストをリセット
+                } else {
+                    // それ以外は本文（複数行対応）
+                    currentText.append(line).append("\n");
+                }
+            }
+            // 最後のページを追加（ファイル末尾に - がない場合用）
+            if (currentText.length() > 0) {
+                newPages.add(new DialoguePage(currentName, currentText.toString().trim()));
+            }
+        } catch (java.io.IOException e) {
+            System.err.println("Dialogue file not found: " + path);
+            newPages.add(new DialoguePage("System", "Error: File not found."));
+        }
+        dialogCache.put(dialogID, newPages);
     }
 
     public void drawDialogue(Graphics g, String name, String text) {

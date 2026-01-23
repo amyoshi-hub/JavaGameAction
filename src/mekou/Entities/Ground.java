@@ -13,7 +13,7 @@ public class Ground extends GameObject {
         this.width = w;
         this.height = h;
         this.z = -1;
-        //anim.load("idle", "mekou/img/Ground/idle", 1);
+        anim.load("idle", "mekou/img/Ground/idle", 1);
 
     }
 

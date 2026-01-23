@@ -13,5 +13,5 @@ G
 G
 G
 G
-GN(DIALOG_01)
+GN(DIALOG:dialog_01)
 G

@@ -4,6 +4,7 @@ import java.util.List;
 
 import mekou.Entities.*;
 import mekou.GameEngine.interfaces.*;
+import mekou.ActionGame.*;
 
 public class CollisionManager {
     private Scene scene;
@@ -61,13 +62,16 @@ public class CollisionManager {
             ((Collider) b).onCollide(a);
         }
     }
+
     private void checkSceneTransition(GameObject a, GameObject b, GameObject player) {
-        if (a instanceof SceneNextTriger && b == player) {
-            SceneNextTriger triger = (SceneNextTriger) a;
-            if(triger != null){
-                String nextSceneName = triger.getNextSceneName();
-                SceneManager.getInstance().load(nextSceneName);
-            }
+        // aがトリガー、bがプレイヤーのパターン
+        if (a instanceof SceneTriger && b instanceof Player) {
+            ((SceneTriger) a).onCollide(b);
+        } 
+        // bがトリガー、aがプレイヤーのパターン
+        else if (b instanceof SceneTriger && a instanceof Player) {
+            ((SceneTriger) b).onCollide(a);
         }
     }
+
 }

@@ -43,13 +43,13 @@ public class SceneTriger extends GameObject implements Collider {
                 return;
             }
             if(targetSceneName.startsWith("DIALOG:")){
-                String dialogId = targetSceneName.substring("DIALOG:".length());
+                String dialogId = targetSceneName.substring("DIALOG:".length()).replace(")", "");
                 System.out.println("Dialogue Triggered: " + dialogId);
                 DialogueManager.getInstance().startDialogue(dialogId);
                 return;
             }
             System.out.println("Scene Transition Triggered to: " + targetSceneName);
-            SceneManager.getInstance().load(targetSceneName);
+            SceneManager.getInstance().load(targetSceneName); /*ここ*/
         }
     }
 
