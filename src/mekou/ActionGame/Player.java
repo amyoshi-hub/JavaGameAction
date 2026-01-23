@@ -5,33 +5,26 @@ import java.awt.Graphics;
 import java.awt.Image;
 import mekou.Entities.AttackBox;
 import mekou.Entities.SparkEffect;
-import mekou.GameEngine.GameObject;
-import mekou.GameEngine.Scene;
-import mekou.GameEngine.interfaces.*;
+import mekou.GameEngine.*;
+import mekou.GameEngine.interfaces.Controllable;
 
-public class Player extends GameObject implements Damageable, Collider, Controllable, Attack {
-
-    private int deadLine = 3000;
-    private int health = 100;
-    private boolean facingRight = false;
+public class Player extends Chara implements Controllable{
 
     public Player() {
         super();
         this.useGravity = true;
+        this.health = 100;
+        this.maxHealth = 100;
         anim.load("idle", "mekou/img/player/idle", 1);
         anim.load("walk", "mekou/img/player/walk", 1);
         anim.load("jump", "mekou/img/player/jump", 1);
     }
 
-    //healthに関して
     @Override
-    public void takeDamage(int damage) {
-        health -= damage;
-        System.out.println("Player took " + damage + " damage. Current health: " + health);
-        if (health <= 0) {
-            //System.out.println("Player is dead.");
-            // 死亡処理をここに追加
-        }
+    protected void updateState() {
+        if (vy < 0) anim.setState("jump");
+        else if (vx != 0) anim.setState("walk");
+        else anim.setState("idle");
     }
 
     @Override
@@ -41,11 +34,6 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         AttackBox ab = scene.createObject(new AttackBox(ax, this.y, facingRight ? "RIGHT" : "LEFT"));
         scene.createObject(new SparkEffect(ax, this.y));
     }
-    
-    @Override
-    public int getHealth() {
-        return health;
-    }
 
     //gameに関してplayerのupdate
     @Override
@@ -54,14 +42,7 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         this.height = 50; // 通常の高さに戻す
 
         super.update();
-        if(isGrounded) vy = 0;
-
-        if (vy < 0) anim.setState("jump");
-        if (vx != 0) anim.setState("walk");
-        else anim.setState("idle");
-
-        if(vx > 0) facingRight = true;
-        else if(vx < 0) facingRight = false;
+        updateAnimaion();
 
         //System.out.println("Player Position: (" + x + ", " + y + ")");
         //System.out.println("Player Health: " + health);
@@ -69,6 +50,12 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         if(this.scene != null && this.scene.getPanel() != null && this.y > this.scene.getPanel().getHeight()){
             //System.out.println("落下死しました"); //リス地を知っていたらリスポーン　知らなければやり直し
         }
+    }
+
+    public void updateAnimaion(){
+        if (vy < 0) anim.setState("jump");
+        if (vx != 0) anim.setState("walk");
+        else anim.setState("idle");
     }
 
     @Override
@@ -81,15 +68,6 @@ public class Player extends GameObject implements Damageable, Collider, Controll
             g.drawImage(frame, (int)x, (int)y, null);
         }
     }
-
-    @Override
-    public void setVX(float vx) { this.vx = vx; }
-
-    @Override
-    public void setVY(float vy) { this.vy = vy; }
-
-    public void setX(float x) { this.x = x; }
-    public void setY(float y) { this.y = y; }
 
     @Override
     public void jump() {
@@ -112,10 +90,6 @@ public class Player extends GameObject implements Damageable, Collider, Controll
         }
     }
 
-    public void upLook() {
-        System.out.println("Player looks up!");
-    }
-
     public void upperAction() {
         System.out.println("Player performs upper action!");
         vy = -10; // 簡単な上昇動作
@@ -124,6 +98,13 @@ public class Player extends GameObject implements Damageable, Collider, Controll
     @Override
     public void onCollide(GameObject other){
 
+    }
+
+    @Override
+    protected void onFalled(){
+        this.x = 100;
+        this.y = 100;
+        this.vy = 0;
     }
 
     public Scene getScene(){

@@ -1,5 +1,7 @@
 package mekou.GameEngine.UI;
 
+import mekou.GameEngine.SceneManager;
+
 public class DialoguePage {
     private String name;
     private String text;

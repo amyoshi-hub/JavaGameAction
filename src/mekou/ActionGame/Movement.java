@@ -2,9 +2,9 @@ package mekou.ActionGame;
 
 import java.awt.event.*;
 import javax.swing.*;
+import mekou.GameEngine.GameLib.GameMode;
 import mekou.GameEngine.Scene;
 import mekou.GameEngine.SceneManager;
-import mekou.GameEngine.SceneManager.GameMode;
 import mekou.GameEngine.interfaces.Controllable;
 
 public class Movement{

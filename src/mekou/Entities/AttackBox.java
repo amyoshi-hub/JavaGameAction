@@ -4,8 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import mekou.GameEngine.GameObject;
+import mekou.GameEngine.interfaces.AttackBoxInterface;
 
-public class AttackBox extends GameObject implements mekou.GameEngine.interfaces.AttackBoxInterface {
+public class AttackBox extends GameObject implements AttackBoxInterface {
     private int lifeSpan = 10; // 10フレームだけ存在して消える
     private int damage = 20;
 

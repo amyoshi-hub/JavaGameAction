@@ -1,12 +1,13 @@
 package mekou.GameEngine;
 
-import mekou.GameEngine.UI.DialogueManager;
-import mekou.GameEngine.interfaces.Collider;
 import java.util.HashMap;
 import java.util.Map;
-
 import java.awt.Graphics;
 import java.awt.Color;
+
+import mekou.GameEngine.UI.DialogueManager;
+import mekou.GameEngine.interfaces.Collider;
+import mekou.GameEngine.GameLib.GameMode;
 
 public class SceneTriger extends GameObject implements Collider {
     private String targetSceneName;
@@ -45,7 +46,9 @@ public class SceneTriger extends GameObject implements Collider {
             if(targetSceneName.startsWith("DIALOG:")){
                 String dialogId = targetSceneName.substring("DIALOG:".length()).replace(")", "");
                 System.out.println("Dialogue Triggered: " + dialogId);
+                DialogueManager.getInstance().enterDialogueMode();
                 DialogueManager.getInstance().startDialogue(dialogId);
+                System.out.println(SceneManager.getInstance().getCurrentGameMode());
                 return;
             }
             System.out.println("Scene Transition Triggered to: " + targetSceneName);
@@ -54,7 +57,7 @@ public class SceneTriger extends GameObject implements Collider {
     }
 
     public String getTarget() { return targetSceneName; }
-        public SceneManager.GameMode getCurrentMode() {
+        public GameMode getCurrentMode() {
         return SceneManager.getInstance().getCurrentGameMode();
     }
 

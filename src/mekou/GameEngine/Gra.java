@@ -2,13 +2,11 @@ package mekou.GameEngine;
 
 import java.awt.*;
 import javax.swing.*;
-
-import mekou.GameEngine.UI.DialogueManager;
+import mekou.GameEngine.UI.*;
 
 public class Gra extends JPanel {
     private Scene scene;
     private GameObject cameraTarget;
-    private UIManager uiManager = new UIManager();
 
     private int cameraShack = 0;
 
@@ -29,6 +27,9 @@ public class Gra extends JPanel {
         double scale = Math.min(getWidth() / WIDTH, getHeight() / HEIGHT);
         
         g2.scale(scale, scale);
+        
+        java.awt.geom.AffineTransform baseTransform = g2.getTransform();
+
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
         if (scene != null) {
             int shakeX = 0, shakeY = 0;
@@ -45,7 +46,8 @@ public class Gra extends JPanel {
                 g2.translate(-(350 - (int)cameraTarget.getX()), 0);
         }
         
-        DialogueManager.getInstance().draw(g2);
+        g2.setTransform(baseTransform);
+        UIProcess.getInstance().draw(g2);
         }
     }
 
@@ -59,7 +61,4 @@ public class Gra extends JPanel {
         cameraShack = amount;
     }
 
-    public UIManager getUIManager() {
-    return this.uiManager; // Graが持っているUIManagerを返す
-}
 }

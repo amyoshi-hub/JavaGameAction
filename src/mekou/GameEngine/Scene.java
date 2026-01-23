@@ -40,18 +40,33 @@ public class Scene{
         createObject(triger);
     }
 
-    //描画更新
-    public void updateAll(){
+    private void prepareUpdate(){
         if(!objectsToAdd.isEmpty()){
             objects.addAll(objectsToAdd);
             objectsToAdd.clear();
         }
-        objects.removeIf(obj -> obj == null);
+
+        mekou.GameEngine.UI.UIProcess.getInstance().update();
+
+        objects.removeIf(obj -> obj == null || !obj.isActive());
         objects.sort((a, b) -> Integer.compare(a.getZ(), b.getZ()));
+    }
+
+    //描画更新
+    public void updateAll(){
+        prepareUpdate();
         for(GameObject obj : objects){
             obj.update();
+            obj.updateAnimaion();
         }
         objects.removeIf(obj -> !obj.isActive());
+    }
+
+    public void animationUpdateAll(){
+        prepareUpdate();
+        for(GameObject obj : objects){
+            obj.updateAnimaion();
+        }
     }
 
     public void drawAll(Graphics g){

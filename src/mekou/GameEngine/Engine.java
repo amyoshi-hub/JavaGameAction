@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import mekou.ActionGame.Movement;
+import mekou.GameEngine.GameLib.*;
 
 public class Engine implements ActionListener {
     private Movement movement;
@@ -20,19 +21,20 @@ public class Engine implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() != this.timer) return;
         //UIMode
-        if(SceneManager.getInstance().getCurrentGameMode() == SceneManager.GameMode.DIALOG){
-            //((Gra)scene.getPanel()).getUIManager().update();
-            scene.getPanel().repaint();
-            Toolkit.getDefaultToolkit().sync();
+        if(SceneManager.getInstance().getCurrentGameMode() == GameMode.DIALOG){
+            if(movement != null) movement.applyInput();
+            scene.animationUpdateAll();
+            render();
             return;
         }
 
-        //通常処理
-        if (movement != null) {
-            movement.applyInput();
-        }            scene.updateAll();
+        if(movement != null) movement.applyInput();
         scene.updateAll();
         scene.CollisionCheck();
+        render();
+    }
+
+    private void render(){
         scene.getPanel().repaint();
         Toolkit.getDefaultToolkit().sync();
     }

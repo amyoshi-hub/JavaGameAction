@@ -4,6 +4,7 @@ import javax.swing.*;
 import mekou.ActionGame.*;
 import mekou.Entities.*;
 import mekou.Entities.UtilFunction.*;
+import mekou.GameEngine.GameLib.GameMode;
 
 
 public class Frame extends JFrame {
@@ -23,12 +24,14 @@ public class Frame extends JFrame {
         SceneManager sm = SceneManager.getInstance();
         sm.setFrame(this);
         sm.registerStages("Games/stages/Stages.txt");
-        System.out.println(sm.getCurrentGameMode());
         initGame("Games/stages/stage1.txt");
+        System.out.println(sm.getCurrentGameMode());
     }
 
     public void initGame(String mapPath){
         if (engine != null) engine.stop(); 
+
+        SceneManager.init(GameMode.values()[0]);
 
         Scene newScene = new Scene();
         newScene.setPanel(this.mp);

@@ -5,24 +5,22 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
+import mekou.GameEngine.GameLib.GameMode;
 
 public class SceneManager {
     private static SceneManager instance;
-    public enum GameMode {
-        TITLE,
-        STAGE,
-        GAMEOVER,
-        CLEAR,
-        DIALOG,
-        SHOP,
-        MENU
-    }
-    private GameMode lastMode = GameMode.STAGE;
-
-    private GameMode currentMode = GameMode.TITLE; // デフォルトはタイトルモード
+    
+    private Stack<GameMode> modeHistory = new Stack<>();
 
     private Map<String, String> sceneRegistry = new HashMap<>(); // 名前とパスの紐付け
     private mekou.GameEngine.Frame gameFrame;
+
+    public static void init(GameMode initialMode) {
+        getInstance().modeHistory.clear();
+        getInstance().modeHistory.push(initialMode);
+        System.out.println("SceneManager initialized with: " + initialMode);
+    }
 
     // 最初に stages.txt を読んで「どの名前がどのファイルか」を登録する
     public void registerStages(String listPath) {
@@ -32,7 +30,7 @@ public class SceneManager {
             List<String> lines = Files.readAllLines(Paths.get(listPath));
             for (String line : lines) {
                 if(line.trim().isEmpty() || !line.contains(":")) continue;
-                String[] parts = line.split(":"); // stage1:Games/stages/stage1.txt
+                String[] parts = line.split(":");
                 sceneRegistry.put(parts[0].trim(), parts[1].trim());
                 System.out.println("Registered Stage: " + sceneRegistry);
             }
@@ -57,23 +55,16 @@ public class SceneManager {
         }
     }
 
-    public void loadAndSetScene(String sceneName) {
-        String path = sceneRegistry.get(sceneName);
-        if (path != null) {
-            gameFrame.initGame(path);
-        }
-    }
-
-    public void enterDialogueMode() {
-        this.lastMode = this.currentMode; // 今のモード（STAGEなど）を保存
-        this.currentMode = GameMode.DIALOG;
-    }
-
-    public void exitDialogueMode() {
-        this.currentMode = lastMode;
-    }
-
     public GameMode getCurrentGameMode(){
-        return currentMode;
+        return modeHistory.peek();
+    }
+    public void pushMode(GameMode newMode){
+        modeHistory.push(newMode);
+    }
+    public void popMode(){
+        if(modeHistory.size() > 1){
+            GameMode oldMode = modeHistory.pop();
+            System.out.println("GameModeが移行します" + oldMode + "->" + getCurrentGameMode());
+        }
     }
 }

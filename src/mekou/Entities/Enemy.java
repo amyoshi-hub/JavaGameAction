@@ -4,11 +4,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.Random;
-import mekou.GameEngine.GameObject;
+import mekou.GameEngine.Chara;
 import mekou.GameEngine.interfaces.*;
+import mekou.GameEngine.*;
 
-public class Enemy extends GameObject implements Damageable, Attack, Collider, Npc{
-    private int health;
+public class Enemy extends Chara implements Npc{
     private int nockbackPower = 10;
 
     public Enemy(int x, int y) {
@@ -21,6 +21,17 @@ public class Enemy extends GameObject implements Damageable, Attack, Collider, N
         this.z = 0;
         this.health = 100;
         anim.load("idle", "mekou/img/Enemy/idle", 1);
+    }
+
+
+    @Override
+    protected void updateState(){
+        anim.setState("idle");
+    }
+
+    @Override
+    protected void onFalled(){
+        this.setActive(false);
     }
 
     public void update(){
@@ -81,11 +92,6 @@ private int currentDir = 0; // -1: 左, 0: 静止, 1: 右
         if (health == 0) {
             this.active = false;
         }
-    }
-
-    @Override
-    public int getHealth() {
-        return health;
     }
 
     @Override

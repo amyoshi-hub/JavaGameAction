@@ -20,13 +20,14 @@ xcopy "%IMG_SRC%" "%IMG_DEST%" /D /E /Y /I >nul
 echo [Step 3] Compiling...
 :: Javaファイルのリストを作成
 dir /s /b %SRC_DIR%\*.java > sources.txt
+
 javac -encoding UTF-8 -d %BIN_DIR% @sources.txt
 
 if %errorlevel% equ 0 (
     echo [Success] Compilation complete.
     echo [Step 4] Launching Game...
     :: クラスパスに bin を指定して実行
-    java -cp %BIN_DIR% %MAIN_CLASS%
+    java -Dfile.encoding=UTF-8 -cp %BIN_DIR% %MAIN_CLASS%
 ) else (
     echo [Error] Compilation failed.
 )

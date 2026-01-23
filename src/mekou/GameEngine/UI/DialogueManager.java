@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import mekou.GameEngine.GameLib.GameMode;
 import mekou.GameEngine.SceneManager;
 
 public class DialogueManager {
@@ -20,8 +21,10 @@ public class DialogueManager {
     public void update(){
         frameCounter++;
         if(frameCounter >= speed && visibleCount < fullText.length()){
-            visibleCount++;
+            //visibleCount++;
+            visibleCount = Math.min(frameCounter / speed, fullText.length());
         }
+        System.out.println(visibleCount);
     }
 
     public void onNext(){
@@ -38,27 +41,29 @@ public class DialogueManager {
             DialoguePage page = pages.get(currentPageIndex);
             displayPage(page);
         }else{
-            SceneManager.getInstance().exitDialogueMode();
+            exitDialogueMode();
         }
     }
 
 
     public void startDialogue(String dialogID) {
-        SceneManager.getInstance().enterDialogueMode();
+        enterDialogueMode();
 
-        // 1. もしキャッシュになかったら「読み込み処理」をする
+        // 1. キャッシュになければ読み込む (load内部でキャッシュへのputまで完結させる)
         if(!dialogCache.containsKey(dialogID)){
-            loadDialogueFile(dialogID);            
-            dialogCache.put(dialogID, pages);
+            loadDialogueFile(dialogID); 
         }
 
-        // 2. キャッシュからリストを取り出す
+        // 2. キャッシュから取り出す
         this.pages = dialogCache.get(dialogID);
         this.currentPageIndex = 0;
 
-        // 3. 最初のページを表示
+        // 3. データの生存確認ログ（これを出せば安心！）
         if(pages != null && !pages.isEmpty()){
+            System.out.println("DEBUG: Pages found! Size: " + pages.size());
             displayPage(pages.get(0));
+        } else {
+            System.out.println("DEBUG: Pages is still empty for ID: " + dialogID);
         }
     }
 
@@ -100,29 +105,31 @@ public class DialogueManager {
     }
 
     public void draw(Graphics2D g2) {
-        if (pages == null || pages.isEmpty()) return;
+        if (pages == null || pages.isEmpty() || currentPageIndex >= pages.size()) return;
 
+        //System.out.println("dialog draw is working");
         DialoguePage currPage = pages.get(currentPageIndex);
-        String subText = fullText.substring(0, visibleCount);
-    
+        int end = Math.min(visibleCount, fullText.length());
+        String subText = fullText.substring(0, end);
+
         // ここで座布団と文字を描画
         drawDialogue(g2, currPage.getName(), subText);
     }
 
     public void drawDialogue(Graphics g, String name, String text) {
         g.setColor(new Color(0, 0, 0, 200)); // 半透明の黒
-        g.fillRect(50, 100, 600, 120);       // メッセージ枠
+        g.fillRect(50, 50, 600, 150);       // メッセージ枠
         
-        System.out.println(name);
-        System.out.println(text);
+        //System.out.println(name);
+        //System.out.println(text);
 
         g.setColor(Color.WHITE);
-        g.setFont(new Font("MS Gothic", Font.BOLD, 16));
-        g.drawString("【" + name + "】", 70, 275);
+        g.setFont(new Font("MS Gothic", Font.BOLD, 18));
+        g.drawString("【" + name + "】", 70, 80);
         g.setFont(new Font("MS Gothic", Font.PLAIN, 16));
         String[] lines = text.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            g.drawString(lines[i], 80, 300 + (i * 25));
+            g.drawString(lines[i], 80, 110 + (i * 25));
         }
     }
 
@@ -130,6 +137,7 @@ public class DialogueManager {
         this.fullText = page.getText();
         this.visibleCount = 0;
         this.frameCounter = 0;
+        //System.out.println("DEBUG: displayPage set fullText to: " + this.fullText);
     }
 
     public static DialogueManager getInstance() {
@@ -137,5 +145,16 @@ public class DialogueManager {
             instance = new DialogueManager();
         }
         return instance;
+    }
+
+    public void enterDialogueMode() {
+        SceneManager.getInstance().pushMode(GameMode.DIALOG);
+    }
+
+    private void exitDialogueMode() {
+        currentPageIndex = 0;
+        pages = new ArrayList<>();
+        fullText = "";
+        SceneManager.getInstance().popMode();
     }
 }

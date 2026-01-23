@@ -39,6 +39,11 @@ public abstract class GameObject {
         y += vy;
     }
 
+    //フックメゾッド
+    public void updateAnimaion(){
+        //継承させて下で処理させる
+    }
+
     // 描画処理（Sceneから呼ばれる）
     public void draw(Graphics g) {
         if (anim != null) {
@@ -76,5 +81,8 @@ public abstract class GameObject {
     }
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+    public Scene getScene(){
+        return this.scene;
     }
 }
