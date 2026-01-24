@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import mekou.ActionGame.Movement;
+import mekou.GameEngine.Editor.EditorFrame;
 import mekou.GameEngine.GameLib.*;
 
 public class Engine implements ActionListener {
@@ -19,6 +20,10 @@ public class Engine implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(EditorFrame.getInstance() != null){
+            EditorFrame.getInstance().update();
+        }
+        
         if(e.getSource() != this.timer) return;
         //UIMode
         if(SceneManager.getInstance().getCurrentGameMode() == GameMode.DIALOG){
@@ -32,6 +37,12 @@ public class Engine implements ActionListener {
         scene.updateAll();
         scene.CollisionCheck();
         render();
+    }
+
+    private void EditorCall(){
+        if(EditorFrame.getInstance() != null){
+            EditorFrame.getInstance().update();
+        }
     }
 
     private void render(){

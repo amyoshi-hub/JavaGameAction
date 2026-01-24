@@ -72,7 +72,7 @@ public class Frame extends JFrame {
     private void startEditor(){
         initGame("Games/stages/stage1.txt");
         Scene currentScene = this.mp.getScene(); //見えているシーンからぶんどる
-        EditorFrame editor = new EditorFrame(currentScene);
+        EditorFrame.getInstance(currentScene);
     }
 
 

@@ -23,4 +23,4 @@ G
 N
 G
 G
-GN(Town1)
+GN(dialog_01)

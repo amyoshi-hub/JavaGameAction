@@ -12,6 +12,7 @@ public class Scene{
     private List<GameObject> objects = new ArrayList<>();
     private JPanel panel;
     private CollisionManager collisionManager;
+    private boolean needRefresh = false;
 
     public Scene(){
         this.collisionManager = new CollisionManager(this);
@@ -37,6 +38,8 @@ public class Scene{
     }
 
     private void prepareUpdate(){
+        int beforeSize = objects.size();
+
         if(!objectsToAdd.isEmpty()){
             objects.addAll(objectsToAdd);
             objectsToAdd.clear();
@@ -45,6 +48,11 @@ public class Scene{
         mekou.GameEngine.UI.UIProcess.getInstance().update();
 
         objects.removeIf(obj -> obj == null || !obj.isActive());
+
+        if(objects.size() != beforeSize){
+            this.needRefresh = true;
+        }
+
         objects.sort((a, b) -> Integer.compare(a.getZ(), b.getZ()));
     }
 
@@ -80,5 +88,11 @@ public class Scene{
     }
     public List<GameObject> getObjects() {
         return this.objects;
+    }
+    public boolean needRefresh(){
+        return this.needRefresh;
+    }
+    public void setNeedRefresh(boolean b){
+        this.needRefresh = b;
     }
 }

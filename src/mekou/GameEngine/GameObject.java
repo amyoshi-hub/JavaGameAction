@@ -58,6 +58,14 @@ public abstract class GameObject {
         return new Rectangle((int)x, (int)y, width, height);
     }
     
+    public void setPosition(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+    public void setX(float x) { this.x = x; }
+    public void setY(float y) { this.y = y; }
+    public void setZ(int z) { this.z = z; }
+
     public int getX() { return (int)x; }
     public int getY() { return (int)y; }
     public int getZ() { return z; }

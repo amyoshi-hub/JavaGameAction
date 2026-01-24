@@ -46,7 +46,7 @@ public class SceneTriger extends GameObject implements Collider {
 
     public void onCollide(GameObject other) {
         if (other instanceof Player) {
-            Player p = Player.getInstance();
+            hitThisFrame = true;
             
             // 1. フラグを立てる（未設定なら）
             if(!isPlayerInside){
