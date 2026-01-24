@@ -13,6 +13,8 @@ public class Player extends Chara implements Controllable{
     private static Player instance;
     private boolean CanAction = false;
     private String pendingDialogId = "";
+    private int maxFallSpeed = 100;
+
 
     public Player() {
         super();
@@ -98,6 +100,7 @@ public class Player extends Chara implements Controllable{
         if(isGrounded){
             slide();
         }else{
+            if(vy > maxFallSpeed) vy = maxFallSpeed;
             vy = 15; // 簡単な下降動作
         }
     }

@@ -70,6 +70,9 @@ public abstract class GameObject {
     public int getY() { return (int)y; }
     public int getZ() { return z; }
 
+    public int getWidth() { return width; }
+    public int getHeight() { return height; }
+
     public void applyGravity() {
         vy += gravityForce; // シンプルな重力効果
     }

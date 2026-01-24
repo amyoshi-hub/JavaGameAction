@@ -20,6 +20,8 @@ public class Frame extends JFrame {
     private Movement move; // Movementを保持
     private JPanel titlePanel;
     private static Frame instance;
+    private int baseScreenSizeX = 1300;
+    private int baseScreenSizeY = 600;
 
 
     Frame() {
@@ -29,7 +31,7 @@ public class Frame extends JFrame {
         this.setLayout(new BorderLayout());
         this.add(this.mp, BorderLayout.CENTER);
 
-        super.setSize(700, 400);
+        super.setSize(baseScreenSizeX, baseScreenSizeY);
 
         setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -158,7 +160,7 @@ public class Frame extends JFrame {
         }
         
         // 背景などの共通オブジェクト
-        newScene.createObject(new backGround(0, 0, 1980, 1080));
+        newScene.createObject(new backGround(0, 0, baseScreenSizeX + 1000, baseScreenSizeY));
     }
 
     public static Frame getInstance(){

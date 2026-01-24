@@ -7,6 +7,8 @@ import mekou.GameEngine.GameObject;
 
 public class backGround extends GameObject {
 
+    private static backGround instance;
+
     public backGround(float x, float y, int w, int h) {
         super();
         this.x = x;
@@ -15,7 +17,7 @@ public class backGround extends GameObject {
         this.height = h;
         this.z = -3;
         anim.load("idle", "mekou/img/backGround/idle", 1);
-
+        instance = this;
     }
 
     @Override
@@ -28,5 +30,9 @@ public class backGround extends GameObject {
             g.fillRect((int)x, (int)y, width, height);
             //System.out.println("backGround image is null");
         }
+    }
+
+    public static backGround getInstance(){
+        return instance;
     }
 }
