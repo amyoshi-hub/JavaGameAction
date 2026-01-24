@@ -26,6 +26,8 @@ public class Animation {
                     this.frameWidth = icon.getIconWidth();
                     this.frameHeight = icon.getIconHeight();
                 }
+            }else{
+                System.err.println("Resource not found:" + path);
             }
         }
         animMap.put(stateName, frames);

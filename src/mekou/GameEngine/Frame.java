@@ -1,6 +1,10 @@
 package mekou.GameEngine;
 
 import java.awt.GridBagLayout;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.swing.*;
 import mekou.ActionGame.*;
 import mekou.Entities.*;
@@ -14,10 +18,11 @@ public class Frame extends JFrame {
     private Engine engine;
     private Movement move; // Movementを保持
     private JPanel titlePanel;
+    private static Frame instance;
 
 
     Frame() {
-
+        instance = this;
         this.mp = new Gra(); // 描画パネル
 
         super.getContentPane().add(this.mp);
@@ -43,17 +48,13 @@ public class Frame extends JFrame {
 
         // --- プレイボタン ---
         playButton.addActionListener(e -> {
-            playGame(); // ここでtitlePanelをremoveしてmpを出す
+            showGameSelection(false); // ここでtitlePanelをremoveしてmpを出す
         });
 
         // --- エディタボタン ---
         editorButton.addActionListener(e -> {
             // エディタ起動時はタイトルを消してゲーム画面を出し、その横に別窓を出す
-            this.remove(titlePanel);
-            this.mp.setVisible(true);
-            startEditor(); 
-            this.revalidate();
-            this.repaint();
+            showGameSelection(true);
         });
 
         titlePanel.add(playButton);
@@ -63,18 +64,64 @@ public class Frame extends JFrame {
         this.repaint();
     }
 
-    public void playGame(){
+    private void showGameSelection(boolean EditorMode) {
+        titlePanel.removeAll(); // 「遊ぶ」「エディタ」ボタンを消す
+        
+        File gamesDir = new File("Games");
+        File[] games = gamesDir.listFiles(File::isDirectory); // フォルダだけ取得
+
+        if (games != null) {
+            for (File game : games) {
+                JButton gameButton = new JButton(game.getName()); // フォルダ名をボタンに
+                gameButton.addActionListener(e -> {
+                    // そのゲームのフォルダにあるステージを読み込んで開始！
+                    String gameFockPath = game.getPath() + "/stage1.txt";
+                    launchGame(gameFockPath);
+                    if (EditorMode){
+                        this.remove(titlePanel);
+                        this.mp.setVisible(true);
+                        initGame(gameFockPath);
+                        Scene currentScene = this.mp.getScene();
+                        EditorFrame.getInstance(currentScene);
+                    }else{
+                        initGame(gameFockPath);
+                    }
+                });
+                titlePanel.add(gameButton);
+            }
+        }
+        titlePanel.revalidate();
+        titlePanel.repaint();
+    }
+
+    public void launchGame(String startMapPath) {
         this.remove(titlePanel);
-        SceneManager.getInstance().registerStages("Games/stages/Stages.txt");
-        initGame("Games/stages/stage1.txt");
+        this.mp.setVisible(true); // パネルを再表示
+        // 必要ならここで SceneManager.getInstance().registerStages(...) も呼ぶ
+        initGame(startMapPath);
+        this.revalidate();
+        this.repaint();
     }
 
-    private void startEditor(){
-        initGame("Games/stages/stage1.txt");
-        Scene currentScene = this.mp.getScene(); //見えているシーンからぶんどる
-        EditorFrame.getInstance(currentScene);
+    public InputStream getStageStream(String path) {
+        try {
+            File externalFile = new File(path);
+            if (externalFile.exists()) {
+                // 1. まずは外側のフォルダを探す（書き換え用）
+                return new FileInputStream(externalFile);
+            } else {
+                // 2. なければjarの内部を探す（学校用・パッキング済み）
+                // パスが / で始まるように調整
+                String resourcePath = path.startsWith("/") ? path : "/" + path;
+                InputStream is = getClass().getResourceAsStream(resourcePath);
+                if (is == null) throw new IOException("Resource not found: " + path);
+                return is;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
-
 
     public void initGame(String mapPath){
         if (engine != null) engine.stop(); 
@@ -104,6 +151,10 @@ public class Frame extends JFrame {
         
         // 背景などの共通オブジェクト
         newScene.createObject(new backGround(0, 0, 1980, 1080));
+    }
+
+    public static Frame getInstance(){
+        return instance;
     }
 
     public static void main(String[] args) {

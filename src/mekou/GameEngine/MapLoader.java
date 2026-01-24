@@ -17,7 +17,20 @@ public class MapLoader {
 
     public void loadMap(String filePath) {
         try {
-            String data = Files.readString(Paths.get(filePath));
+            InputStream is = Frame.getInstance().getStageStream(filePath);
+            if (is == null){
+                System.err.println("Map File not found:" + filePath);
+                return;
+            }
+            String data;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line).append("\n");
+                }
+                data = sb.toString();
+            }
             // 改行で分割（各行がゲームの「X方向」の1列分になる）
             String[] columns = data.split("\n");
 
