@@ -1,6 +1,7 @@
 package mekou.GameEngine;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import mekou.ActionGame.Player;
 import mekou.Entities.*;
 
@@ -22,7 +23,7 @@ public class MapLoader {
                 return;
             }
             String data;
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                 StringBuilder sb = new StringBuilder();
                 String line;
                 while ((line = reader.readLine()) != null) {
