@@ -1,13 +1,12 @@
 package mekou.GameEngine;
 
 import java.io.*;
-import java.nio.file.*;
 import mekou.ActionGame.Player;
 import mekou.Entities.*;
 
 public class MapLoader {
     private final int CHIP_SIZE = 50; // 1ブロックのサイズ
-    private Scene scene;
+    private final Scene scene;
     private Player player;
     int MAX_HEIGHT_CHIPS = 8;
 
@@ -45,9 +44,9 @@ public class MapLoader {
                 int py = (MAX_HEIGHT_CHIPS - y - 1) * CHIP_SIZE;
 
                 switch (chip) {
-                    //特殊parse
-                    case 'N': // SceneTriger
-                    case 'D': // Decal
+                    case 'N' : // SceneTriger
+                    case 'D' :
+                        // Decal
                         String sub = column.substring(y);
                         String target = extractTarget(sub);
                         
@@ -56,34 +55,34 @@ public class MapLoader {
                         
                         // カッコの終わり ')' までインデックスを飛ばす
                         int closingBracketIndex = sub.indexOf(")");
-                            if (closingBracketIndex != -1) {
-                                y += closingBracketIndex; // カッコがある時だけ飛ばす
-                            } else {
-                                // カッコがない場合はエラーを出してその1文字だけ飛ばす
-                                System.err.println("Map Error: Missing ')' at col " + x + " index " + y);
+                        if (closingBracketIndex != -1) {
+                            y += closingBracketIndex; // カッコがある時だけ飛ばす
+                        } else {
+                            // カッコがない場合はエラーを出してその1文字だけ飛ばす
+                            System.err.println("Map Error: Missing ')' at col " + x + " index " + y);
                         }
                         break;
-
-                    case 'G':
+                    case 'G' :
                         scene.createObject(new Ground(px, py, CHIP_SIZE, CHIP_SIZE));
                         break;
-                    case 'E':
+                    case 'E' :
                         scene.createObject(new Enemy(px, py));
                         break;
-                    case 'P':
+                    case 'P' :
                         this.player = new Player();
                         this.player.setX(px);
                         this.player.setY(py);
                         scene.createObject(this.player);
                         break;
-                    case ' ': 
+                    case ' ' :
                         break;
                 }
-            }
+                //特殊parse
+                // SceneTriger
+                            }
         } 
         }catch (IOException e) {
             System.err.println("Error loading map: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 

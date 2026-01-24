@@ -1,10 +1,8 @@
 package mekou.GameEngine.UI;
 
-import mekou.GameEngine.SceneManager;
-
 public class DialoguePage {
-    private String name;
-    private String text;
+    private final String name;
+    private final String text;
 
     public DialoguePage(String name, String text) {
         this.name = name;

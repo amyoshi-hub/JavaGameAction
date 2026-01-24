@@ -61,7 +61,7 @@ public class Scene{
         prepareUpdate();
         for(GameObject obj : objects){
             obj.update();
-            obj.updateAnimaion();
+            obj.updateAnimation();
         }
         objects.removeIf(obj -> !obj.isActive());
     }
@@ -69,7 +69,7 @@ public class Scene{
     public void animationUpdateAll(){
         prepareUpdate();
         for(GameObject obj : objects){
-            obj.updateAnimaion();
+            obj.updateAnimation();
         }
     }
 

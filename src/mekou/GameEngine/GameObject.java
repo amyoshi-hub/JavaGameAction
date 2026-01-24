@@ -40,7 +40,7 @@ public abstract class GameObject {
     }
 
     //フックメゾッド
-    public void updateAnimaion(){
+    public void updateAnimation(){
         //継承させて下で処理させる
     }
 

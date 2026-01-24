@@ -1,17 +1,14 @@
 package mekou.GameEngine;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.awt.Graphics;
 import java.awt.Color;
-
-import mekou.GameEngine.UI.DialogueManager;
-import mekou.GameEngine.interfaces.Collider;
+import java.awt.Graphics;
 import mekou.ActionGame.Player;
 import mekou.GameEngine.GameLib.GameMode;
+import mekou.GameEngine.UI.DialogueManager;
+import mekou.GameEngine.interfaces.Collider;
 
 public class SceneTriger extends GameObject implements Collider {
-    private String targetSceneName;
+    private final String targetSceneName;
     private boolean isPlayerInside = false;
     private boolean hitThisFrame = false;
 
@@ -44,13 +41,14 @@ public class SceneTriger extends GameObject implements Collider {
         g.drawRect((int)x, (int)y, width, height);
     }
 
+    @Override
     public void onCollide(GameObject other) {
         if (other instanceof Player) {
             hitThisFrame = true;
             
             // 1. フラグを立てる（未設定なら）
             if(!isPlayerInside){
-                onEnter((Player)other);
+                onEnter();
                 isPlayerInside = true;
             }
 
@@ -77,7 +75,7 @@ public class SceneTriger extends GameObject implements Collider {
         return DialogueManager.getInstance(); 
     }
 
-    private void onEnter(Player p) {
+    private void onEnter() {
         System.out.println("Enter: 会話範囲に入った");
     }
 

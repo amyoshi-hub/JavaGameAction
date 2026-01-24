@@ -15,11 +15,13 @@ public class UIProcess {
     public void update() {
         GameMode mode = SceneManager.getInstance().getCurrentGameMode();
         switch(mode) {
-            case STAGE:
+            case STAGE :
                 HUD.getInstance().update();
                 break;
-            case DIALOG:
-                DialogueManager.getInstance().update();
+                case DIALOG :
+            DialogueManager.getInstance().update();
+                break;
+            default :
                 break;
         }
     }
@@ -29,12 +31,14 @@ public class UIProcess {
         
         // カメラの影響を受けないように座標を 0,0 に固定して描画
         switch(mode) {
-            case STAGE:
+            case STAGE :
                 HUD.getInstance().draw(g2);
                 break;
-            case DIALOG:
-                //System.out.println("dialog mode display");
+            case DIALOG :
+                 //System.out.println("dialog mode display");
                 DialogueManager.getInstance().draw(g2);
+                break;
+            default : 
                 break;
         }
     }

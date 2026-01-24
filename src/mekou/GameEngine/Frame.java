@@ -14,7 +14,7 @@ import mekou.GameEngine.GameLib.GameMode;
 
 
 public class Frame extends JFrame {
-    private Gra mp;
+    private final Gra mp;
     private Engine engine;
     private Movement move; // Movementを保持
     private JPanel titlePanel;

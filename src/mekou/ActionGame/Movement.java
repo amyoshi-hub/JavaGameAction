@@ -11,7 +11,7 @@ import mekou.GameEngine.interfaces.Controllable;
 public class Movement{
 
 	private Controllable target;
-	private boolean leftPressed, rightPressed, spacePressed, attackPressed, CrouchPressed, UpperAction;
+	private boolean leftPressed, rightPressed, spacePressed, attackPressed, CrouchPressed, UpperAction, interactPressed;
 	
 	private JPanel panel;
 
@@ -55,18 +55,37 @@ public class Movement{
 			im.put(KeyStroke.getKeyStroke("released W"), "UpperReleased");
 			am.put("UpperAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { UpperAction = true; } });
 			am.put("UpperReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { UpperAction = false; } });
+
+			im.put(KeyStroke.getKeyStroke("E"), "interactAction");
+			im.put(KeyStroke.getKeyStroke("released E"), "interactReleased");
+
+			am.put("interactAction", new AbstractAction() { public void actionPerformed(ActionEvent e) { interactPressed = true; } });
+			am.put("interactReleased", new AbstractAction() { public void actionPerformed(ActionEvent e) { interactPressed = false; } });
 		}
 
 	public void applyInput(){
 		GameMode currentMode = SceneManager.getInstance().getCurrentGameMode();
 		if(currentMode == GameMode.DIALOG){
-			if(spacePressed) {
+			if(spacePressed || interactPressed) {
 					target.getScene().getDialogueManager().onNext();
 					spacePressed = false;
 				}
 			target.setVX(0);
 			return;
 		}
+
+		if(interactPressed){
+			System.out.println("space pressed" + target.getCanAction());
+			if(target.getCanAction()){
+				// 待機していた ID で会話を開始
+				String id = target.getPendingDialogId();
+				System.out.println("会話を試みる" + id);
+				DialogueManager.getInstance().startDialogue(id);
+					
+				spacePressed = false; // 会話開始に消費。ジャンプさせない！
+			}
+		}
+
 		int  vx = 0;
 		
 		if(leftPressed) vx -= 5;	
@@ -75,18 +94,8 @@ public class Movement{
 		target.setVX(vx);
 
 		if(spacePressed){
-        System.out.println("space pressed" + target.getCanAction());
-			if(target.getCanAction()){
-				// 待機していた ID で会話を開始
-				String id = target.getPendingDialogId();
-				System.out.println("会話を試みる" + id);
-				DialogueManager.getInstance().startDialogue(id);
-				
-				spacePressed = false; // 会話開始に消費。ジャンプさせない！
-			} else {
 				target.jump();
 				spacePressed = false;
-			}
     	}
 		if(CrouchPressed && attackPressed==true){
 			target.downAttack();

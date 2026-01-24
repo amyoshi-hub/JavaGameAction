@@ -19,7 +19,7 @@ public abstract class Chara extends GameObject implements Damageable, Collider, 
     }
 
     @Override
-    public void updateAnimaion(){
+    public void updateAnimation(){
         if(vx > 0) facingRight = true;
         else if (vx < 0) facingRight = false;
 

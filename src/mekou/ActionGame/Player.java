@@ -47,7 +47,7 @@ public class Player extends Chara implements Controllable{
         this.height = 50; // 通常の高さに戻す
 
         super.update();
-        updateAnimaion();
+        updateAnimation();
 
         //System.out.println("Player Position: (" + x + ", " + y + ")");
         //System.out.println("Player Health: " + health);
@@ -57,7 +57,7 @@ public class Player extends Chara implements Controllable{
         }
     }
 
-    public void updateAnimaion(){
+    public void updateAnimation(){
         if (vy < 0) anim.setState("jump");
         if (vx != 0) anim.setState("walk");
         else anim.setState("idle");
@@ -70,7 +70,11 @@ public class Player extends Chara implements Controllable{
         // timeInt（フレーム数）を渡して、今の絵をもらう
         Image frame = anim.getCurrentFrame(tick);
         if (frame != null){
-            g.drawImage(frame, (int)x, (int)y, null);
+            if(facingRight){
+                g.drawImage(frame, (int)x, (int)y, null);
+            }else{
+                g.drawImage(frame, (int)x + width, (int)y, -width, height, null);
+            }
         }
     }
 
