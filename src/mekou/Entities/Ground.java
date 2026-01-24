@@ -2,15 +2,19 @@ package mekou.Entities;
 
 import java.awt.*;
 import mekou.GameEngine.GameObject;
+import mekou.GameEngine.MapLoader;
 
 public class Ground extends GameObject {
 
-    public Ground(float x, float y, int w, int h) {
+    private int sizeX, sizeY = 100;
+    public Ground(float x, float y) {
         super();
         this.x = x;
         this.y = y;
-        this.width = w;
-        this.height = h;
+        this.sizeX = MapLoader.getChipSize();
+        this.sizeY = MapLoader.getChipSize();
+        this.width = sizeX;
+        this.height = sizeY;
         this.z = -1;
         anim.load("idle", "mekou/img/Ground", 1);
 

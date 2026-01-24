@@ -3,11 +3,17 @@ package mekou.GameEngine;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public abstract class GameObject {
+    GameObject parent = null;
+    protected List<GameObject> children = new ArrayList<>();
     protected boolean active = true;
     protected Scene scene;
 
+    protected float spawnX, spawnY;
     protected float x, y, vx, vy = 0;
     
     protected int z;
@@ -62,9 +68,24 @@ public abstract class GameObject {
         this.x = x;
         this.y = y;
     }
-    public void setX(float x) { this.x = x; }
-    public void setY(float y) { this.y = y; }
-    public void setZ(int z) { this.z = z; }
+    public void setX(float x) { 
+        this.x = x;
+        if(parent != null){
+            setX(this.x + parent.getX());
+        }
+    }
+    public void setY(float y) { 
+        this.y = y;
+        if(parent != null){
+            setY(parent.getY() + this.y);
+        }
+    }
+    public void setZ(float z) {
+         this.z = (int)z;
+        if(parent != null){
+            setZ(parent.getZ() + this.z); //zは奥行きの設定ということに注意　LWJGLの方との互換性を持ちたいだけ
+        }        
+    }
 
     public int getX() { return (int)x; }
     public int getY() { return (int)y; }
@@ -77,11 +98,28 @@ public abstract class GameObject {
         vy += gravityForce; // シンプルな重力効果
     }
 
+    public void addChild(GameObject child) {
+        child.parent = this;
+        this.children.add(child);
+    }
+    public List<GameObject> getChildren() { return children; }
+
     public void land(float groundY) {
         this.y = groundY - this.height; // 足元を地面の天面に合わせる
         this.isGrounded = true;
         this.vy = 0;
         //System.out.println("Landed on the ground at y: " + this.y);
+    }
+
+    public void recordSpawnPoint() {
+        this.spawnX = this.x;
+        this.spawnY = this.y;
+    }
+
+    public void resetToSpawn() {
+        this.x = spawnX;
+        this.y = spawnY;
+        this.active = true; // 死んでても復活
     }
 
     public boolean isActive() {
@@ -95,5 +133,8 @@ public abstract class GameObject {
     }
     public Scene getScene(){
         return this.scene;
+    }
+    public GameObject getParent(){
+        return parent;
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import mekou.ActionGame.Player;
+import mekou.Entities.SceneTriger;
 import mekou.GameEngine.UI.DialogueManager;
 
 public class Scene{
@@ -13,6 +14,7 @@ public class Scene{
     private JPanel panel;
     private CollisionManager collisionManager;
     private boolean needRefresh = false;
+    private boolean isRunning = false;
 
     public Scene(){
         this.collisionManager = new CollisionManager(this);
@@ -20,9 +22,6 @@ public class Scene{
 
     public void setPanel(JPanel panel){
         this.panel = panel;
-    }
-    public JPanel getPanel(){
-        return this.panel;
     }
     
     //z-buffer
@@ -33,7 +32,8 @@ public class Scene{
     }
 
     public void setSceneTriger(int x, int y, String target){
-        SceneTriger triger = new SceneTriger(x, y, target);
+        SceneTriger triger = new SceneTriger(x, y);
+        triger.setTargetSceneName(target);
         createObject(triger);
     }
 
@@ -60,7 +60,9 @@ public class Scene{
     public void updateAll(){
         prepareUpdate();
         for(GameObject obj : objects){
-            obj.update();
+            if(isRunning){
+                obj.update();
+            }
             obj.updateAnimation();
         }
         objects.removeIf(obj -> !obj.isActive());
@@ -70,6 +72,12 @@ public class Scene{
         prepareUpdate();
         for(GameObject obj : objects){
             obj.updateAnimation();
+        }
+    }
+
+    public void initSpawnPoint(){
+        for(GameObject obj : objects){
+            obj.recordSpawnPoint();
         }
     }
 
@@ -95,4 +103,11 @@ public class Scene{
     public void setNeedRefresh(boolean b){
         this.needRefresh = b;
     }
+    public JPanel getPanel(){
+        return this.panel;
+    }
+
+    //動かすかどうか
+    public void setRunning(boolean b) { this.isRunning = b; }
+    public boolean isRunning() { return this.isRunning; }
 }

@@ -6,7 +6,7 @@ import mekou.ActionGame.Player;
 import mekou.Entities.*;
 
 public class MapLoader {
-    private final int CHIP_SIZE = 50; // 1ブロックのサイズ
+    private static final int CHIP_SIZE = 50; // 1ブロックのサイズ
     private final Scene scene;
     private Player player;
     int MAX_HEIGHT_CHIPS = 8;
@@ -52,8 +52,9 @@ public class MapLoader {
                         String target = extractTarget(sub);
                         
                         if (chip == 'N') scene.setSceneTriger(px, py, target);
-                        else scene.createObject(new Decal(px, py, 0, target));
-                        
+                        else {
+                            scene.createObject(new Decal(px, py));
+                        }
                         // カッコの終わり ')' までインデックスを飛ばす
                         int closingBracketIndex = sub.indexOf(")");
                         if (closingBracketIndex != -1) {
@@ -64,7 +65,7 @@ public class MapLoader {
                         }
                         break;
                     case 'G' :
-                        scene.createObject(new Ground(px, py, CHIP_SIZE, CHIP_SIZE));
+                        scene.createObject(new Ground(px, py));
                         break;
                     case 'E' :
                         scene.createObject(new Enemy(px, py));
@@ -92,8 +93,12 @@ public class MapLoader {
     }
 
     private String extractTarget(String data) {
-    int start = data.indexOf("(") + 1;
-    int end = data.indexOf(")");
-    return (start > 0 && end > start) ? data.substring(start, end) : "default";
-}
+        int start = data.indexOf("(") + 1;
+        int end = data.indexOf(")");
+        return (start > 0 && end > start) ? data.substring(start, end) : "default";
+    }
+
+    public static int getChipSize(){
+        return CHIP_SIZE;
+    }
 }

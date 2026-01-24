@@ -1,25 +1,27 @@
-package mekou.GameEngine;
+package mekou.Entities;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import mekou.ActionGame.Player;
 import mekou.GameEngine.GameLib.GameMode;
+import mekou.GameEngine.GameObject;
+import mekou.GameEngine.SceneManager;
 import mekou.GameEngine.UI.DialogueManager;
 import mekou.GameEngine.interfaces.Collider;
 
 public class SceneTriger extends GameObject implements Collider {
-    private final String targetSceneName;
+    private String targetSceneName;
     private boolean isPlayerInside = false;
     private boolean hitThisFrame = false;
 
-    public SceneTriger(int x, int y, String targetSceneName) {
+    public SceneTriger(int x, int y) {
         super();
         this.x = x;
         this.y = y;
         this.width = 50;
         this.height = 50;
         this.z = 1000; // 最前面に描画
-        this.targetSceneName = targetSceneName;
+        this.targetSceneName = "Title";
     }
 
     @Override
@@ -64,6 +66,10 @@ public class SceneTriger extends GameObject implements Collider {
             // 3. シーン遷移（こっちは触れたら即移動でOKならそのまま）
             SceneManager.getInstance().load(targetSceneName);
         }
+    }
+
+    public void setTargetSceneName(String newTargetSceneName){
+        this.targetSceneName = newTargetSceneName;
     }
 
     public String getTarget() { return targetSceneName; }

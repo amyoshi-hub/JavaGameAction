@@ -22,13 +22,3 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-
-# Build outputs
-/dist/
-/out/
-/bin/
-
-# Temporary / OS files
-manifest.mf
-.DS_Store
-Thumbs.db

@@ -1,7 +1,10 @@
 package mekou.GameEngine.Editor;
 
+import java.awt.*;
 import javax.swing.*;
-import java.awt.BorderLayout;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import mekou.Entities.*;
 import mekou.GameEngine.*;
 
 public class EditorFrame extends JFrame {
@@ -10,6 +13,9 @@ public class EditorFrame extends JFrame {
     private JList<GameObject> objectList;
     private DefaultListModel<GameObject> listModel;
     private JPanel propertyPanel;
+    private JTree objectTree;
+    private DefaultTreeModel treeModel;
+    private DefaultMutableTreeNode rootNode;
 
     private EditorFrame(Scene scene) {
         this.scene = scene;
@@ -17,33 +23,83 @@ public class EditorFrame extends JFrame {
         this.setSize(400, 800);
         this.setLayout(new BorderLayout());
 
-        // 1. オブジェクト一覧を表示するリスト
-        listModel = new DefaultListModel<>();
+        JButton createButton = new JButton("createEntitirys");
+
+        createButton.addActionListener(e -> {
+            JPopupMenu menu = new JPopupMenu();
+            
+            // 例：敵を追加
+            menu.add(new JMenuItem("Add Enemy")).addActionListener(al -> {
+                Enemy enemy = new Enemy(100, 100); 
+                scene.createObject(enemy);
+                scene.setNeedRefresh(true);
+            });
+
+            // 例：地面を追加
+            menu.add(new JMenuItem("Add Ground")).addActionListener(al -> {
+                Ground g = new Ground(0, 500);
+                scene.createObject(g);
+                scene.setNeedRefresh(true);
+            });
+            menu.add(new JMenuItem("Add SceneTriger")).addActionListener(al -> {
+                SceneTriger st = new SceneTriger(0, 500);
+                scene.createObject(st);
+                scene.setNeedRefresh(true);
+            });
+            menu.add(new JMenuItem("Add Decal")).addActionListener(al -> {
+                Decal d = new Decal(0, 500);
+                scene.createObject(d);
+                scene.setNeedRefresh(true);
+            });
+
+            menu.show(createButton, 0, createButton.getHeight());
+        });
+
+        JButton playButton = new JButton("▶ Play");
+        playButton.addActionListener(e ->{
+            boolean nextState = !scene.isRunning();
+            scene.setRunning(nextState);
+            playButton.setText(nextState ? "■ Stop" : "▶ Play");
+        });
+
+        JPanel toolbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        toolbar.add(createButton);
+        toolbar.add(playButton);
+        this.add(toolbar, BorderLayout.NORTH);
+
+        rootNode = new DefaultMutableTreeNode("Scene Root");
+        treeModel = new DefaultTreeModel(rootNode);
+        objectTree = new JTree(treeModel);
+
         refreshObjectList();
         
-        objectList = new JList<>(listModel);
-        // リストに表示する名前をカスタマイズ（クラス名など）
-        objectList.setCellRenderer(new DefaultListCellRenderer() {
+        objectTree.addTreeSelectionListener(e -> {
+    // 選択されたノードを取得
+            DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) objectTree.getLastSelectedPathComponent();
+            
+            if (selectedNode != null) {
+                Object userObj = selectedNode.getUserObject();
+                
+                // Rootノード（"Scene Root"という文字列）ではなく、GameObjectなら更新
+                if (userObj instanceof GameObject) {
+                    updatePropertyPanel((GameObject) userObj);
+                }
+            }
+        });
+
+        objectTree.setCellRenderer(new javax.swing.tree.DefaultTreeCellRenderer() {
             @Override
-            public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (value instanceof GameObject) {
-                    setText(value.getClass().getSimpleName() + " (z:" + ((GameObject)value).getZ() + ")");
+            public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean exp, boolean leaf, int row, boolean hasFocus) {
+                super.getTreeCellRendererComponent(tree, value, sel, exp, leaf, row, hasFocus);
+                Object userObj = ((DefaultMutableTreeNode) value).getUserObject();
+                if (userObj instanceof GameObject) {
+                    setText(userObj.getClass().getSimpleName());
                 }
                 return this;
             }
         });
 
-        objectList.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-            GameObject selected = objectList.getSelectedValue();
-                if (selected != null) {
-                    updatePropertyPanel(selected);
-                }
-            }
-        });
-
-        this.add(new JScrollPane(objectList), BorderLayout.WEST);
+        this.add(new JScrollPane(objectTree), BorderLayout.WEST);
 
         // 2. 右側には「選んだやつの詳細」を出すパネル（今は空でOK）
         propertyPanel = new JPanel();
@@ -61,40 +117,87 @@ public class EditorFrame extends JFrame {
         timer.start();
     }
 
-    // シーン内の全オブジェクトをリストに流し込む
     public void refreshObjectList() {
-        listModel.clear();
+        rootNode.removeAllChildren();
+        
+        // 1. 全オブジェクトのノードを一旦作成してマップに保持（親子関係を組むため）
+        java.util.Map<GameObject, DefaultMutableTreeNode> nodeMap = new java.util.HashMap<>();
         for (GameObject obj : scene.getObjects()) {
-            listModel.addElement(obj);
+            nodeMap.put(obj, new DefaultMutableTreeNode(obj));
         }
+
+        // 2. 親子関係に基づいてツリーを構築
+        for (GameObject obj : scene.getObjects()) {
+            DefaultMutableTreeNode currentNode = nodeMap.get(obj);
+            // GameObject に getParent() が実装されている想定
+            GameObject parent = obj.getParent(); 
+            
+            if (parent != null && nodeMap.containsKey(parent)) {
+                nodeMap.get(parent).add(currentNode); // 親ノードの下に追加
+            } else {
+                rootNode.add(currentNode); // 親がいなければルート直下
+            }
+        }
+        
+        treeModel.reload();
     }
 
     private void updatePropertyPanel(GameObject obj) {
         propertyPanel.removeAll();
+        // 縦に並べるけど、各行は横並びのパネルを入れる
         propertyPanel.setLayout(new BoxLayout(propertyPanel, BoxLayout.Y_AXIS));
+        propertyPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // 名前を表示
-        propertyPanel.add(new JLabel("Type: " + obj.getClass().getSimpleName()));
-        
-        propertyPanel.add(Box.createVerticalStrut(10));
-        
-        propertyPanel.add(new JLabel("X Position:"));
+        // 1. タイトル
+        JLabel title = new JLabel("OBJECT: " + obj.getClass().getSimpleName());
+        title.setFont(title.getFont().deriveFont(java.awt.Font.BOLD, 14f));
+        propertyPanel.add(title);
+        propertyPanel.add(Box.createVerticalStrut(15));
 
-        // X座標編集用のテキストフィールド
-        JTextField xField = new JTextField(String.valueOf(obj.getX()));
-        xField.addActionListener(e -> {
-            try {
-                obj.setX(Float.parseFloat(xField.getText())); // 入力したら即ワープ！
-            } catch (NumberFormatException ex) {
-                xField.setText(String.valueOf(obj.getX()));
-            }
+        // 2. 座標編集（ラベルとフィールドを1行にまとめるヘルパーメソッドを呼ぶ想定）
+        propertyPanel.add(createFieldRow("X Pos:", obj.getX(), val -> obj.setX(val)));
+        propertyPanel.add(createFieldRow("Y Pos:", obj.getY(), val -> obj.setY(val)));
+        propertyPanel.add(createFieldRow("Z Pos:", obj.getZ(), val -> obj.setZ(val)));
+
+        JButton changeImgBtn = new JButton("Select Image");
+            changeImgBtn.addActionListener(e -> {
+                JFileChooser fc = new JFileChooser("src/mekou/img");
+                if (fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    String path = fc.getSelectedFile().getPath();
+                    // obj.loadNewImage(path); みたいな処理
+                }
         });
-        propertyPanel.add(xField);
         
+        // 3. スケール（将来用）
+        propertyPanel.add(Box.createVerticalStrut(10));
+        propertyPanel.add(createFieldRow("Scale:", 1.0f, val -> { /* obj.setScale(val) */ }));
+
         propertyPanel.revalidate();
         propertyPanel.repaint();
     }
 
+    private JPanel createFieldRow(String labelText, float initialValue, java.util.function.Consumer<Float> onCommit) {
+        JPanel row = new JPanel(new BorderLayout(5, 5));
+        row.setMaximumSize(new java.awt.Dimension(400, 30)); // 縦に伸びすぎないように固定
+        
+        JLabel label = new JLabel(labelText);
+        label.setPreferredSize(new java.awt.Dimension(60, 20));
+        
+        JTextField field = new JTextField(String.valueOf(initialValue));
+        field.addActionListener(e -> {
+            try {
+                onCommit.accept(Float.parseFloat(field.getText()));
+                scene.setNeedRefresh(true); // 変更があったらリフレッシュ
+            } catch (Exception ex) {
+                field.setText("err");
+            }
+        });
+
+        row.add(label, BorderLayout.WEST);
+        row.add(field, BorderLayout.CENTER);
+        return row;
+    }
+    
     public void update() {
         if (scene.needRefresh()) {
             refreshObjectList();
