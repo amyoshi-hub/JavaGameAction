@@ -75,14 +75,14 @@ public class Movement{
 		}
 
 		if(interactPressed){
-			System.out.println("space pressed" + target.getCanAction());
+			System.out.println("interactPressed pressed" + target.getCanAction());
 			if(target.getCanAction()){
 				// 待機していた ID で会話を開始
 				String id = target.getPendingDialogId();
 				System.out.println("会話を試みる" + id);
 				DialogueManager.getInstance().startDialogue(id);
 					
-				spacePressed = false; // 会話開始に消費。ジャンプさせない！
+				interactPressed = false; // 会話開始に消費。ジャンプさせない！
 			}
 		}
 
@@ -97,6 +97,8 @@ public class Movement{
 				target.jump();
 				spacePressed = false;
     	}
+
+		
 		if(CrouchPressed && attackPressed==true){
 			target.downAttack();
 		}

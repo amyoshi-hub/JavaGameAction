@@ -48,7 +48,7 @@ public class SceneTriger extends GameObject implements Collider {
             
             // 1. フラグを立てる（未設定なら）
             if(!isPlayerInside){
-                onEnter();
+                onEnter(Player.getInstance());
                 isPlayerInside = true;
             }
 
@@ -75,8 +75,9 @@ public class SceneTriger extends GameObject implements Collider {
         return DialogueManager.getInstance(); 
     }
 
-    private void onEnter() {
+    private void onEnter(Player p) {
         System.out.println("Enter: 会話範囲に入った");
+        if(!p.getCanAction()) p.changeCanAction();
     }
 
     private void onExit(Player p) {
