@@ -34,8 +34,9 @@ public class Player extends Chara implements Controllable{
 
     @Override
     public void attack() {
+        float attackBoxWidth = 40;
         // 自分の座標を元に AttackBox を生み出す
-        float ax = this.x + (facingRight ? width : -40);
+        float ax = this.x + (facingRight ? this.width : this.x - attackBoxWidth);
         AttackBox ab = scene.createObject(new AttackBox(ax, this.y, facingRight ? "RIGHT" : "LEFT"));
         scene.createObject(new SparkEffect(ax, this.y));
     }
@@ -71,7 +72,7 @@ public class Player extends Chara implements Controllable{
         Image frame = anim.getCurrentFrame(tick);
         if (frame != null){
             if(facingRight){
-                g.drawImage(frame, (int)x, (int)y, null);
+                g.drawImage(frame, (int)x, (int)y, width, height, null);
             }else{
                 g.drawImage(frame, (int)x + width, (int)y, -width, height, null);
             }
@@ -85,8 +86,10 @@ public class Player extends Chara implements Controllable{
  
     public void slide() {
         if (isGrounded) {
-            this.height = 25; // 当たり判定を半分にする（スライディング！）
-            this.vx = (facingRight) ? 10 : -10; // 勢いよく滑る
+            this.height = 25;
+            if(vx > 0) this.vx = 10;
+            else if (vx < 0) this.vx = -10;
+            else this.vx = (facingRight) ? 10 : -10; // 勢いよく滑る
         }
     }
 
@@ -95,7 +98,7 @@ public class Player extends Chara implements Controllable{
         if(isGrounded){
             slide();
         }else{
-            vy = 10; // 簡単な下降動作
+            vy = 15; // 簡単な下降動作
         }
     }
 

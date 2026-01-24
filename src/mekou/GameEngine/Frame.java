@@ -1,5 +1,6 @@
 package mekou.GameEngine;
 
+import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,9 +26,13 @@ public class Frame extends JFrame {
         instance = this;
         this.mp = new Gra(); // 描画パネル
 
-        super.getContentPane().add(this.mp);
+        this.setLayout(new BorderLayout());
+        this.add(this.mp, BorderLayout.CENTER);
+
         super.setSize(700, 400);
-        setLocation(100, 100);
+
+        setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
         SceneManager.getInstance().setFrame(this);
@@ -42,6 +47,8 @@ public class Frame extends JFrame {
         // mpを隠してtitlePanelを前面に出す
         this.mp.setVisible(false);
         this.getContentPane().add(titlePanel); 
+        
+        this.add(titlePanel, BorderLayout.CENTER);
 
         JButton playButton = new JButton("冒険を始める");
         JButton editorButton = new JButton("エディタを起動");
@@ -97,6 +104,7 @@ public class Frame extends JFrame {
     public void launchGame(String startMapPath) {
         this.remove(titlePanel);
         this.mp.setVisible(true); // パネルを再表示
+        this.add(this.mp, BorderLayout.CENTER);
         // 必要ならここで SceneManager.getInstance().registerStages(...) も呼ぶ
         initGame(startMapPath);
         this.revalidate();

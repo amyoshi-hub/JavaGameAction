@@ -20,7 +20,7 @@ public class Enemy extends Chara implements Npc{
         this.height = 50;
         this.z = 0;
         this.health = 100;
-        anim.load("idle", "mekou/img/Enemy/idle", 1);
+        anim.load("idle", "mekou/img/Enemy", 1);
     }
 
 

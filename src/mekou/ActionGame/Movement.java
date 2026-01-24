@@ -12,8 +12,9 @@ public class Movement{
 
 	private Controllable target;
 	private boolean leftPressed, rightPressed, spacePressed, attackPressed, CrouchPressed, UpperAction, interactPressed;
-	
+	private boolean interactWasPressed = false;
 	private JPanel panel;
+	private int specialAttackCound = 0;
 
 
 	public Movement(Scene scene, Controllable target){
@@ -65,11 +66,13 @@ public class Movement{
 
 	public void applyInput(){
 		GameMode currentMode = SceneManager.getInstance().getCurrentGameMode();
+		boolean isAnyInteracting = spacePressed || interactPressed;
 		if(currentMode == GameMode.DIALOG){
-			if(spacePressed || interactPressed) {
+			if(spacePressed || interactPressed && !interactWasPressed) {
 					target.getScene().getDialogueManager().onNext();
 					spacePressed = false;
 				}
+				isAnyInteracting = (spacePressed || interactPressed);
 			target.setVX(0);
 			return;
 		}
@@ -99,14 +102,19 @@ public class Movement{
     	}
 
 		
-		if(CrouchPressed && attackPressed==true){
+		if(CrouchPressed && attackPressed==true && specialAttackCound < 10){
 			target.downAttack();
+			specialAttackCound++;
 		}
-		if(UpperAction && attackPressed==true){
+		if(UpperAction && attackPressed==true && specialAttackCound < 5){
 			target.upperAction();
+			specialAttackCound++;
 		}
 		if(attackPressed){
 			target.attack();
+		}
+		if(!attackPressed){
+			specialAttackCound = 0;
 		}
 	}
 }
