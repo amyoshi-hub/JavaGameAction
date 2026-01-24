@@ -28,13 +28,19 @@ echo ------------------------------------------------------
   --java-options "-Dfile.encoding=UTF-8" ^
   --type app-image ^
   --dest "%OUT_DIR%" ^
+  --icon "mekou_logo.ico" ^
   --verbose
 echo ------------------------------------------------------
 
 :: 4. リソースのコピー
 echo [Step 3] Copying Resources...
+:: Gamesフォルダのコピー
 xcopy /E /I /Y "Games" "%OUT_DIR%\MEKOU_ACTION\Games"
-xcopy /E /I /Y "mekou\img" "%OUT_DIR%\MEKOU_ACTION\mekou\img"
+
+:: mekou\img フォルダのコピー (mekouフォルダごとコピーする)
+xcopy /E /I /Y "src\mekou\img" "%OUT_DIR%\MEKOU_ACTION\mekou\img"
+:: もし bin の中に最新画像があるならこちら
+:: xcopy /E /I /Y "bin\mekou\img" "%OUT_DIR%\MEKOU_ACTION\mekou\img"
 
 echo.
 echo ======================================================
